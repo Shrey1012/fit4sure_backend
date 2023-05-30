@@ -38,6 +38,8 @@ const setting = require("./routes/admin/setting");
 const trainer = require("./routes/admin/trainer");
 const web_features = require("./routes/admin/web_features");
 const web_qna = require("./routes/admin/web_qna");
+const web_stories = require("./routes/admin/web_stories");
+const web_careers = require("./routes/admin/web_careers");
 
 const AdminRoutes = (app) => {
   app.use("/", main);
@@ -79,6 +81,8 @@ const AdminRoutes = (app) => {
   app.use("/admin/trainer", trainer);
   app.use("/admin/web_features", web_features);
   app.use("/admin/web_qna", web_qna);
+  app.use("/admin/web_stories", web_stories);
+  app.use("/admin/web_careers", web_careers);
 };
 
 module.exports = AdminRoutes;
