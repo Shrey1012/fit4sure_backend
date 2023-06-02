@@ -7,9 +7,15 @@ const firebaseApp = require("../../firebase");
 
 const bucket = firebaseApp.storage().bucket();
 
+const generateUniqueFileName = (fileName) => {
+  const uniqueId = Date.now().toString();
+  const fileExtension = fileName.split(".").pop();
+  return `${uniqueId}.${fileExtension}`;
+};
+
 const uploadImageToFirebase = async (imageFile) => {
   try {
-    const fileName = imageFile.originalname;
+    const fileName = generateUniqueFileName(imageFile.originalname);
     const filePath = `posts/${fileName}`;
     const file = bucket.file(filePath);
 

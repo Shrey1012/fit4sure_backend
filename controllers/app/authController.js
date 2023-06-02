@@ -32,9 +32,15 @@ const bcrpyt = require("bcrypt");
 
 const bucket = firebaseApp.storage().bucket();
 
+const generateUniqueFileName = (fileName) => {
+  const uniqueId = Date.now().toString();
+  const fileExtension = fileName.split(".").pop();
+  return `${uniqueId}.${fileExtension}`;
+};
+
 const uploadImageToFirebase = async (imageFile) => {
   try {
-    const fileName = imageFile.originalname;
+    const fileName = generateUniqueFileName(imageFile.originalname);
     const filePath = `users/${fileName}`;
     const file = bucket.file(filePath);
 
@@ -165,13 +171,15 @@ class AuthController {
     try {
       const user = await User.findById(req.userId);
       if (!user) return res.status(401).send("User not found");
+      if(user.image){
       const file = bucket.file(user.image);
       const [signedUrl] = await file.getSignedUrl({
         action: "read",
         expires: "03-01-2500",
       });
       user.image = signedUrl;
-      
+    }
+
       return res.send(user);
     } catch (error) {
       console.log(error);
