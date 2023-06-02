@@ -15,7 +15,6 @@ const fs = require("fs");
 const sendEmail = require("../../config/mailer");
 const bcrpyt = require("bcrypt");
 
-
 // Set The Storage Engine
 // const storage = multer.diskStorage({
 //   destination: path.join(root, "/public/uploads/profile"),
@@ -126,21 +125,20 @@ class AuthController {
     }
   };
 
-  
   static googleAuthCallback = async (req, res) => {
     const { credential } = req.body;
-  
+
     try {
       // Extract relevant user data from the Google authentication response
       const { email, name, picture } = credential;
-  
+
       // Check if the user already exists in the database based on the email
       let user = await User.findOne({ email });
-  
+
       // If the user doesn't exist, create a new user in the database
       if (!user) {
         const hashedPassword = await bcrpyt.hash("", 12); // Set an empty password for Google-authenticated users
-  
+
         user = await User.create({
           email,
           password: hashedPassword,
@@ -148,14 +146,14 @@ class AuthController {
           image: picture,
         });
       }
-  
+
       // Generate a token for the user
       const token = jwt.sign(
         { email: user.email, id: user._id },
         process.env.TOKEN_SECRET,
         { expiresIn: "1h" }
       );
-  
+
       // Return the user data and token to the frontend
       res.status(200).json({ result: user, token });
     } catch (error) {
@@ -167,6 +165,13 @@ class AuthController {
     try {
       const user = await User.findById(req.userId);
       if (!user) return res.status(401).send("User not found");
+      const file = bucket.file(user.image);
+      const [signedUrl] = await file.getSignedUrl({
+        action: "read",
+        expires: "03-01-2500",
+      });
+      user.image = signedUrl;
+      
       return res.send(user);
     } catch (error) {
       console.log(error);
@@ -176,11 +181,7 @@ class AuthController {
 
   static forgotPassword = async (req, res) => {
     const { email } = req.body;
-    try{
-
-      
-
-
+    try {
     } catch (error) {
       console.log(error);
       return res.status(401).send("Something went wrong");
@@ -198,7 +199,8 @@ class AuthController {
           return res.status(500).send(err);
         }
 
-        const { name, email, password } = req.body;
+        const { name, email, contactNumber, dateOfBirth, stateOfResidence} =
+          req.body;
         const userId = req.params.userId;
 
         const user = await User.findById(userId);
@@ -206,42 +208,47 @@ class AuthController {
           return res.status(404).send("User not found");
         }
 
+        // Delete the existing image if it exists
+        if (user.image && user.image.includes("googleusercontent.com")) {
+        
+
+        } else if (user.image) {
+        const existingFilePath = user.image;
+        const existingFile = bucket.file(existingFilePath);
+        await existingFile.delete();
+      }
+
         user.name = name;
         user.email = email;
-        user.password = password;
+        user.contactNumber = contactNumber;
+        user.dateOfBirth = dateOfBirth;
+        user.stateOfResidence = stateOfResidence;
 
         if (req.file) {
           const imageUrl = await uploadImageToFirebase(req.file);
           user.image = imageUrl;
         }
 
-        
         await user.save();
 
-      
         return res.status(200).json({
           message: "User profile updated successfully",
           user: user,
         });
       });
-
     } catch (error) {
       console.log(error);
       return res.status(401).send("Something went wrong");
     }
   };
 
-  
   static login = async (req, res) => {
     // const mobile_number = req.body.mobile_number;
     // let msg = "Something went wrong please try again later";
-
     // var mobile_regex = /^\d{10}$/;
-
     // if (!mobile_regex.test(mobile_number)) {
     //   return res.status(401).send("Invalid Mobile Number");
     // }
-
     // try {
     //   let user = await User.findOne({ mobile_number });
     //   if (!user) {
@@ -250,7 +257,6 @@ class AuthController {
     //     });
     //     user = await user.save();
     //   }
-
     //   let newOtp = await otpGenerator.generate(4, {
     //     alphabets: false,
     //     upperCase: false,
@@ -259,15 +265,12 @@ class AuthController {
     //   if (mobile_number == "8952829519") {
     //     newOtp = 1234;
     //   }
-
     //   //newOtp = 1234;
     //   let customerMobile = user.mobile_number;
     //   sendSMS(customerMobile, newOtp);
-
     //   const otpExist = await Otp.findOne({
     //     user,
     //   });
-
     //   if (otpExist) {
     //     await Otp.findOneAndUpdate(
     //       {
@@ -298,17 +301,13 @@ class AuthController {
     // let msg = "Something went wrong please try again later";
     // try {
     //   const { mobile_number, otp } = req.body;
-
     //   const user = await User.findOne({ mobile_number });
-
     //   if (!user) return res.status(404).send("User not found");
-
     //   const userOtp = await Otp.findOne({ user });
     //   let is_registered = 0;
     //   if (user && user.mobile_number && user.mobile_number != "") {
     //     is_registered = 1;
     //   }
-
     //   if (otp == userOtp.otp) {
     //     //create and assign a token
     //     const token = jwt.sign(
@@ -321,10 +320,8 @@ class AuthController {
     //       token: token,
     //       is_registered: is_registered,
     //     };
-
     //     return res.send(returnData);
     //   }
-
     //   return res.status(401).send("Invalid otp");
     // } catch (error) {
     //   console.log(error);
@@ -341,13 +338,11 @@ class AuthController {
     //   const payload = jwt.decode(token, process.env.TOKEN_SECRET);
     //   const user = await User.findById(payload._id);
     //   if (!user) return res.status(401).send("User not found");
-
     //   await User.findByIdAndUpdate(user._id, registerData);
     //   let returnObj = {
     //     message: "Success",
     //     statusCode: 200,
     //   };
-
     //   // sending notification start
     //   const notification = Notification({
     //     user: req.id,
@@ -358,7 +353,6 @@ class AuthController {
     //   });
     //   await notification.save();
     //   if (req.app.socket) req.app.socket.emit("User Registered");
-
     //   // sending notification end
     //   // await sendEmail(
     //   //   registerData.email,
@@ -376,10 +370,8 @@ class AuthController {
     //   upload(req, res, async function (err) {
     //     var token = req.body.token;
     //     const payload = jwt.decode(token, process.env.TOKEN_SECRET);
-
     //     const user = await User.findById(payload._id);
     //     if (!user) return res.status(401).send("User not found");
-
     //     const data = req.body;
     //     const profile = await User.findByIdAndUpdate(user._id, {
     //       image: req.file ? req.file.filename : "",
@@ -399,7 +391,6 @@ class AuthController {
     //       allergies: data.allergies,
     //       preferred_cuisine: data.preferred_cuisine,
     //     });
-
     //     await profile.save();
     //     // sending notification start
     //     const notification = Notification({
@@ -411,7 +402,6 @@ class AuthController {
     //     });
     //     await notification.save();
     //     if (req.app.socket) req.app.socket.emit("Profile Updated");
-
     //     // sending notification end
     //     return res.send("profile Update successfully");
     //   });
@@ -424,11 +414,9 @@ class AuthController {
     // let msg = "Something went wrong please try again later";
     // try {
     //   var token = req.body.token;
-
     //   const payload = jwt.decode(token, process.env.TOKEN_SECRET);
     //   const user = await User.findById(payload._id);
     //   if (!user) return res.status(401).send("User not found");
-
     //   res.send(user);
     // } catch (error) {
     //   console.log(error);
@@ -443,17 +431,13 @@ class AuthController {
     //   const payload = jwt.decode(token, process.env.TOKEN_SECRET);
     //   const user = await User.findById(payload.id);
     //   if (!user) return res.status(401).send("User not found");
-
     //   let findData = {
     //     coupon_code: coupon_code,
     //   };
-
     //   let findRec = await Coupon.findOne(findData);
     //   if (!findRec) return res.status(401).send("Invalid coupon");
-
     //   if (findRec.is_used == true)
     //     return res.status(401).send("Coupon already used");
-
     //   let returnObj = {
     //     message: "Coupon Applied",
     //     data: {
