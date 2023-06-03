@@ -11,7 +11,7 @@ const sliderRoute = require("./routes/admin/sliderRoute");
 const banner = require("./routes/admin/banner");
 const blog = require("./routes/admin/blog");
 const post = require("./routes/admin/post");
-// const shortVideo = require("./routes/admin/shortVideo");
+const shortVideo = require("./routes/admin/shortVideo");
 const package = require("./routes/admin/package");
 const plan = require("./routes/admin/plan");
 const payment = require("./routes/admin/payment");
@@ -55,7 +55,7 @@ const AdminRoutes = (app) => {
   app.use("/admin/banners", banner);
   app.use("/admin/blog", blog);
   app.use("/admin/post", post);
-  // app.use("/admin/shortvideo", shortVideo);
+  app.use("/admin/shortvideo", shortVideo);
   app.use("/admin/package", package);
   app.use("/admin/plan", plan);
   app.use("/admin/payment", payment);

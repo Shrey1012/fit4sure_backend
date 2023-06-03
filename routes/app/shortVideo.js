@@ -2,9 +2,8 @@ const ShortVideoController = require("../../controllers/app/shortVideoController
 const { auth } = require("../../middlewares/Appauth");
 const router = require("express").Router();
 
-router.post("/add", auth, ShortVideoController.add_shortVideo);
-router.post("/like", ShortVideoController.shortvideo_like);
-router.post("/comment", ShortVideoController.shortvideo_comment);
-router.post("/saved", ShortVideoController.video_saved);
+router.get("/all", ShortVideoController.get_all_shortVideo);
+router.post("/:videoId/like", auth, ShortVideoController.shortvideo_like);
+router.post("/:videoId/unlike", auth, ShortVideoController.shortvideo_unlike);
 
 module.exports = router;

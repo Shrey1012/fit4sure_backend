@@ -1,18 +1,20 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+  title: {
+    type: String,
+    required: true,
   },
   video: {
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   approved: {
     type: Boolean,
     default: false,
