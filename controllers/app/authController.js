@@ -196,6 +196,41 @@ class AuthController {
     }
   };
 
+  static changePassword = async (req, res) => {
+    try {
+      const { oldPassword, newPassword, confirmNewPassword } = req.body;
+      const userId = req.userId;
+  
+      if (!oldPassword || !newPassword || !confirmNewPassword) {
+        return res.status(400).send('All fields are required');
+      }
+  
+      if (newPassword !== confirmNewPassword) {
+        return res.status(400).send("New password and confirm password don't match");
+      }
+  
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+  
+      const passwordMatch = await bcrpyt.compare(oldPassword, user.password);
+      if (!passwordMatch) {
+        return res.status(401).send('Invalid old password');
+      }
+  
+      const hashedPassword = await bcrpyt.hash(newPassword, 12);
+  
+      user.password = hashedPassword;
+      await user.save();
+  
+      res.status(200).send('Password changed successfully');
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Something went wrong');
+    }
+  };
+
   static editUserProfile = async (req, res) => {
     try {
       upload(req, res, async function (err) {

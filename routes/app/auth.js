@@ -15,5 +15,6 @@ router.post("/google_auth", AuthController.googleAuthCallback);
 router.get("/user-profile", auth, AuthController.userProfile);
 router.post("/forgot-password", AuthController.forgotPassword);
 router.put("/edit-profile/:userId", auth, AuthController.editUserProfile);
+router.put("/change-password", auth, AuthController.changePassword);
 
 module.exports = router;
