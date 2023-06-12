@@ -47,21 +47,58 @@ const uploadImageToFirebase = async (imageFile) => {
 class postController {
   static add_post = async (req, res) => {
     try {
-      upload(req, res, async function (err) {
-        if (err instanceof multer.MulterError) {
-          console.log(err);
-          return res.status(500).send(err);
-        } else if (err) {
-          console.log(err);
-          return res.status(500).send(err);
-        }
+      if (req.file) {
+        upload(req, res, async function (err) {
+          if (err instanceof multer.MulterError) {
+            console.log(err);
+            return res.status(500).send(err);
+          } else if (err) {
+            console.log(err);
+            return res.status(500).send(err);
+          }
 
-        if (!req.file) {
-          return res.status(400).send("Please upload an image file");
-        }
+          const imageUrl = await uploadImageToFirebase(req.file);
 
-        const imageUrl = await uploadImageToFirebase(req.file);
+          var text = req.body.text;
 
+          var category = req.body.category;
+
+          var userId = req.body.userId;
+
+          let post = {
+            image: imageUrl,
+            text: text,
+            category: category,
+            user_id: userId,
+          };
+
+          let saveObj = post;
+          await Post.create(saveObj);
+
+          let returnObj = {
+            message: "Success",
+            data: {
+              image: imageUrl,
+              text: text,
+              category: category,
+              user_id: userId,
+            },
+          };
+          // sending notification start
+          const notification = Notification({
+            user: req.userId,
+            type: "Post-added",
+            data: {
+              time: Date.now(),
+            },
+          });
+          await notification.save();
+          if (req.app.socket) req.app.socket.emit("Post-added");
+
+          // sending notification end
+          res.send(returnObj);
+        });
+      } else {
         var text = req.body.text;
 
         var category = req.body.category;
@@ -69,7 +106,6 @@ class postController {
         var userId = req.body.userId;
 
         let post = {
-          image: imageUrl,
           text: text,
           category: category,
           user_id: userId,
@@ -81,7 +117,6 @@ class postController {
         let returnObj = {
           message: "Success",
           data: {
-            image: imageUrl,
             text: text,
             category: category,
             user_id: userId,
@@ -100,7 +135,7 @@ class postController {
 
         // sending notification end
         res.send(returnObj);
-      });
+      }
     } catch (error) {
       console.log(error);
       return res

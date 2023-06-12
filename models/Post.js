@@ -11,7 +11,6 @@ const schema = new mongoose.Schema({
   },
   text: {
     type: String,
-    max: 255,
   },
   category: {
     type: String,
@@ -38,21 +37,10 @@ const schema = new mongoose.Schema({
       },
     },
   ],
-  datetime: {
+  date: {
     type: Date,
     required: false,
     default: Date.now,
-  },
-  date: {
-    type: String,
-    required: false,
-  },
-  time: {
-    type: String,
-  },
-  approved: {
-    type: Boolean,
-    default: false,
   },
   created_at: {
     type: String,
