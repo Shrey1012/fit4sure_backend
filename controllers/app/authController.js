@@ -171,14 +171,14 @@ class AuthController {
     try {
       const user = await User.findById(req.userId);
       if (!user) return res.status(401).send("User not found");
-      if(user.image){
-      const file = bucket.file(user.image);
-      const [signedUrl] = await file.getSignedUrl({
-        action: "read",
-        expires: "03-01-2500",
-      });
-      user.image = signedUrl;
-    }
+      if (user.image) {
+        const file = bucket.file(user.image);
+        const [signedUrl] = await file.getSignedUrl({
+          action: "read",
+          expires: "03-01-2500",
+        });
+        user.image = signedUrl;
+      }
 
       return res.send(user);
     } catch (error) {
@@ -200,34 +200,36 @@ class AuthController {
     try {
       const { oldPassword, newPassword, confirmNewPassword } = req.body;
       const userId = req.userId;
-  
+
       if (!oldPassword || !newPassword || !confirmNewPassword) {
-        return res.status(400).send('All fields are required');
+        return res.status(400).send("All fields are required");
       }
-  
+
       if (newPassword !== confirmNewPassword) {
-        return res.status(400).send("New password and confirm password don't match");
+        return res
+          .status(400)
+          .send("New password and confirm password don't match");
       }
-  
+
       const user = await User.findById(userId);
       if (!user) {
-        return res.status(404).send('User not found');
+        return res.status(404).send("User not found");
       }
-  
+
       const passwordMatch = await bcrpyt.compare(oldPassword, user.password);
       if (!passwordMatch) {
-        return res.status(401).send('Invalid old password');
+        return res.status(401).send("Invalid old password");
       }
-  
+
       const hashedPassword = await bcrpyt.hash(newPassword, 12);
-  
+
       user.password = hashedPassword;
       await user.save();
-  
-      res.status(200).send('Password changed successfully');
+
+      res.status(200).send("Password changed successfully");
     } catch (error) {
       console.log(error);
-      res.status(500).send('Something went wrong');
+      res.status(500).send("Something went wrong");
     }
   };
 
@@ -242,7 +244,7 @@ class AuthController {
           return res.status(500).send(err);
         }
 
-        const { name, email, contactNumber, dateOfBirth, stateOfResidence} =
+        const { name, email, contactNumber, dateOfBirth, stateOfResidence } =
           req.body;
         const userId = req.params.userId;
 
@@ -251,16 +253,6 @@ class AuthController {
           return res.status(404).send("User not found");
         }
 
-        // Delete the existing image if it exists
-        if (user.image && user.image.includes("googleusercontent.com")) {
-        
-
-        } else if (user.image) {
-        const existingFilePath = user.image;
-        const existingFile = bucket.file(existingFilePath);
-        await existingFile.delete();
-      }
-
         user.name = name;
         user.email = email;
         user.contactNumber = contactNumber;
@@ -268,6 +260,13 @@ class AuthController {
         user.stateOfResidence = stateOfResidence;
 
         if (req.file) {
+          if (user.image && user.image.includes("googleusercontent.com")) {
+          } else if (user.image) {
+            const existingFilePath = user.image;
+            const existingFile = bucket.file(existingFilePath);
+            await existingFile.delete();
+          }
+
           const imageUrl = await uploadImageToFirebase(req.file);
           user.image = imageUrl;
         }

@@ -1,20 +1,65 @@
 const mongoose = require("mongoose");
 const Trainer = require("../../models/Trainer");
 const Adminauth = require("../../models/Adminauth");
+const Category = require("../../models/Category");
 const multer = require("multer");
-const path = require("path");
 const imageFilter = require("../../config/imageFilter");
-const fs = require("fs");
-const root = process.cwd();
-const moment = require("moment");
+const firebaseApp = require("../../firebase");
+
+const storage = firebaseApp.storage();
+
+const bucket = firebaseApp.storage().bucket();
+
+const generateUniqueFileName = (fileName) => {
+  const uniqueId = Date.now().toString();
+  const fileExtension = fileName.split(".").pop();
+  return `${uniqueId}.${fileExtension}`;
+};
+
+const uploadImageToFirebase = async (imageFile) => {
+  try {
+    const fileName = generateUniqueFileName(imageFile.originalname);
+    const filePath = `trainers/${fileName}`;
+    const file = bucket.file(filePath);
+
+    // Create a write stream to upload the image file
+    const writeStream = file.createWriteStream({
+      metadata: {
+        contentType: imageFile.mimetype,
+      },
+    });
+
+    // Pipe the image file to the write stream
+    writeStream.end(imageFile.buffer);
+
+    // Handle the completion of the upload
+    return new Promise((resolve, reject) => {
+      writeStream.on("finish", () => {
+        resolve(filePath);
+      });
+
+      writeStream.on("error", (error) => {
+        reject(error);
+      });
+    });
+  } catch (error) {
+    throw new Error("Error uploading image to Firebase Storage");
+  }
+};
 
 class TrainerController {
   static addGet = async (req, res) => {
     try {
-      const trainer = await Trainer.find();
+      const trainers = await Trainer.find();
       const admin = await Adminauth.find({});
-
-      res.render("admin/add-trainer", { trainer, admin });
+      const categories = await Category.find().sort({
+        created_at: -1,
+      });
+      res.render("admin/add-trainer", {
+        trainers,
+        admin,
+        categories,
+      });
     } catch (err) {
       console.log(err);
       return res.send("Something went wrong please try again later");
@@ -24,19 +69,22 @@ class TrainerController {
   static add = async (req, res) => {
     try {
       upload(req, res, async function (err) {
-        if (req.fileValidationError) {
-          return res.send(req.fileValidationError);
-        } else if (!req.file) {
-          return res.send("Please upload an icon");
-        } else if (err instanceof multer.MulterError) {
+        if (err instanceof multer.MulterError) {
           console.log(err);
-          return res.send(err);
+          return res.status(500).send(err);
         } else if (err) {
           console.log(err);
-          return res.send(err);
+          return res.status(500).send(err);
         }
 
+        if (!req.file) {
+          return res.status(400).send("Please upload an image file");
+        }
+
+        const imageUrl = await uploadImageToFirebase(req.file);
+
         const trainer = new Trainer({
+          image: imageUrl,
           name: req.body.name,
           email: req.body.email,
           phone: req.body.phone,
@@ -44,13 +92,16 @@ class TrainerController {
           about: req.body.about,
           location: req.body.location,
           experties: req.body.experties,
-          image: req.file.filename,
           bank_name: req.body.bank_name,
           account_holder_name: req.body.account_holder_name,
           account_no: req.body.account_no,
           ifsc_code: req.body.ifsc_code,
           branch: req.body.branch,
           upi: req.body.upi,
+          category: req.body.category ? req.body.category : "Not Found",
+          people_trained: req.body.people_trained,
+          rating: req.body.rating,
+          website_desc: req.body.website_desc,
         });
 
         await trainer.save();
@@ -71,8 +122,18 @@ class TrainerController {
     try {
       const trainer = await Trainer.find();
       const admin = await Adminauth.find({});
+      const TrainersWithImageURLs = await Promise.all(
+        trainer.map(async (trainer) => {
+          const file = storage.bucket().file(trainer.image);
+          const [signedUrl] = await file.getSignedUrl({
+            action: "read",
+            expires: "03-01-2500",
+          });
+          return { ...trainer.toObject(), image: signedUrl };
+        })
+      );
       return res.render("admin/trainer-list", {
-        trainer,
+        trainer: TrainersWithImageURLs,
         admin,
       });
     } catch (error) {
@@ -131,6 +192,12 @@ class TrainerController {
           ifsc_code: req.body.edit_ifsc_code,
           branch: req.body.edit_branch,
           upi: req.body.edit_upi,
+          category: req.body.edit_category
+            ? req.body.edit_category
+            : "Not Found",
+          people_trained: req.body.edit_people_trained,
+          rating: req.body.edit_rating,
+          website_desc: req.body.edit_website_desc,
           updated_at: Date.now(),
         }
       );
@@ -149,18 +216,12 @@ class TrainerController {
       const trainer = await Trainer.findOne({
         _id: req.body.id,
       });
-      //  return console.log(Astrologer)
+      const filePath = trainer.image;
+      const file = bucket.file(filePath);
+      await file.delete();
       await Trainer.deleteOne({
         _id: trainer.id,
       });
-      fs.unlink(
-        path.join(root, "/public/uploads/trainer", trainer.image),
-        (err) => {
-          if (err) {
-            console.log(err);
-          }
-        }
-      );
       return res.send({
         error: false,
         message: "Trainer Deleted Successfully",
@@ -248,20 +309,8 @@ class TrainerController {
   };
 }
 
-// Set The Storage Engine
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../public/uploads/trainer"),
-  filename: function (req, file, cb) {
-    cb(null, `${Date.now()}.jpg`);
-  },
-});
-
-// Init Upload
 const upload = multer({
-  storage: storage,
-  // limits: {
-  //     fileSize: 1000000
-  // },
+  storage: multer.memoryStorage(),
   fileFilter: imageFilter,
 }).single("image");
 

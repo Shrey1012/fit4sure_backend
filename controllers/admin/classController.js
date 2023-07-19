@@ -1,5 +1,6 @@
 const Classes = require("../../models/Classes");
 const Documents = require("../../models/Documents");
+const Trainer = require("../../models/Trainer");
 const Adminauth = require("../../models/Adminauth");
 const User = require("../../models/User");
 const multer = require("multer");
@@ -8,25 +9,35 @@ const root = process.cwd();
 const imageFilter = require("../../config/imageFilter");
 const docFilter = require("../../config/docFilter");
 const fs = require("fs");
+const Category = require("../../models/Category");
 
 class ClassController {
   static list = async (req, res) => {
     try {
-      let classes = await Classes.find().populate("user_id").sort({
-        created_at: -1,
-      });
+      let classes = await Classes.find()
+        .populate("user_id trainer_id")
+        .populate({
+          path: "category",
+          populate: {
+            path: "name",
+            model: "Category",
+          },
+        });
       const user_id = await User.find().sort({
         created_at: -1,
       });
-
+      const trainer_id = await Trainer.find().sort({
+        created_at: -1,
+      });
       const admin = await Adminauth.find();
+      const categories = await Category.find().sort({ created_at: -1 });
 
       if (user_id.length > 0) {
         for (var i = 0; i < user_id.length; i++) {
           if (user_id[i].name && user_id[i].name != "") {
             user_id[i].name = user_id[i].name;
           } else {
-            user_id[i].name = user_id[i].mobile_number;
+            user_id[i].name = user_id[i].contactNumber;
           }
         }
       }
@@ -34,7 +45,9 @@ class ClassController {
       return res.render("admin/classes", {
         classes,
         user_id,
+        trainer_id,
         admin,
+        categories,
       });
     } catch (error) {
       console.log(error);
@@ -74,13 +87,13 @@ class ClassController {
         datetime: meetingDateTIme,
         date: req.body.date ? req.body.date : "",
         time: req.body.time ? req.body.time : "",
-        title: req.body.title ? req.body.title : "",
         link: req.body.link ? req.body.link : "",
         meeting_id: req.body.meeting_id ? req.body.meeting_id : "",
         meeting_password: req.body.meeting_password
           ? req.body.meeting_password
           : "",
         user_id: req.body.user_id,
+        trainer_id: req.body.trainer_id,
       });
 
       await slider.save();
@@ -180,6 +193,7 @@ class ClassController {
         },
         {
           user_id: req.body.user_id,
+          trainer_id: req.body.trainer_id,
           title: req.body.title,
           link: req.body.link,
           meeting_id: req.body.meeting_id,

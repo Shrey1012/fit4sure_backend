@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 
 const TrainerSchema = new mongoose.Schema({
+  category: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+  ],
   name: {
     type: String,
   },
@@ -50,6 +57,15 @@ const TrainerSchema = new mongoose.Schema({
   wallet: {
     type: Number,
     default: 0,
+  },
+  people_trained:{
+    type: Number,
+  },
+  rating:{
+    type: Number,
+  },
+  website_desc:{
+    type: String,
   },
   created_at: {
     type: String,

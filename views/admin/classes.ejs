@@ -11,7 +11,7 @@
               style="height: 70px; background-color: #6fd943"
             >
               <div class="col-12">
-                <h4 class="float-left">Classes</h4>
+                <h4 class="float-left">Schedule</h4>
                 <div class="head-right-btn">
                   <button
                     class="btn btn-sm btn-secondary float-right card-text-btn"
@@ -26,7 +26,7 @@
                       data-title="Invite New User"
                       data-toggle="tooltip"
                       title=""
-                      data-bs-original-title="Add Class"
+                      data-bs-original-title="Add Schedule"
                     >
                       Add
                     </a>
@@ -39,16 +39,17 @@
               <div class="row">
                 <div class="col-12">
                   <div class="table-responsive p-2">
-                    <table class="table table-md">
+                    <table id="example" class="table table-md">
                       <thead>
                         <tr class="text-center">
-                          <th>Username</th>
-                          <th>Title</th>
+                          <th>User</th>
+                          <th>Trainer</th>
+                          <th>Category</th>
                           <th>Zoom Link</th>
-                          <th>Date</th>
-                          <th>Time</th>
                           <th>Meeting Id</th>
                           <th>Meeting Password</th>
+                          <th>Date</th>
+                          <th>Time</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -58,18 +59,26 @@
                           <td colspan="100%">No Data</td>
                         </tr>
                         <% } else {%> <% classes.forEach(function(classes){%>
-
                         <tr>
-                          <td width="15%">
-                            <%= classes.user_id ? classes.user_id.name :
-                            "NotAvailable" %>
+                          <td>
+                            <%= classes.user_id ? classes.user_id.name : "" %>
                           </td>
-                          <td width="15%"><%= classes.title %></td>
-                          <td width="15%"><%= classes.link %></td>
-                          <td width="15%"><%= classes.date %></td>
-                          <td width="15%"><%= classes.time %></td>
-                          <td width="15%"><%= classes.meeting_id %></td>
-                          <td width="15%"><%= classes.meeting_password %></td>
+                          <td width="10%">
+                            <%= classes.trainer_id ? classes.trainer_id.name : "" %>
+                          </td>
+                          <td width="10%"><% if (classes.trainer_id && classes.trainer_id.category) { %>
+                            <% classes.trainer_id.category.forEach(function(categoryId) { %>
+                              <% var category = categories.find(function(c) { return c._id.toString() === categoryId.toString(); }); %>
+                              <%= category ? category.name : "" %>
+                            <% }); %>
+                          <% } else { %>
+                            ""
+                          <% } %></td>
+                          <td width="10%"><%= classes.link %></td>
+                          <td width="10%"><%= classes.meeting_id %></td>
+                          <td width="10%"><%= classes.meeting_password %></td>
+                          <td width="10%"><%= classes.date %></td>
+                          <td width="10%"><%= classes.time %></td>
                           <td
                             class="d-flex justify-content-between align-center"
                           >
@@ -77,17 +86,17 @@
                               href="documents/<%= classes._id %>"
                               data-toggle="tooltip"
                               data-bs-original-title="Documents Upload"
-                              ><i class="btn btn-success btn-lg fas fa-add"></i
+                              ><i class="btn btn-success btn-md fas fa-add"></i
                             ></a>
 
                             <i
-                              class="btn btn-info btn-lg fas fa-edit"
+                              class="btn btn-info btn-md fas fa-edit"
                               id="edit_btn"
                               data-toggle="modal"
                               data-model="<%= JSON.stringify(classes) %>"
                             ></i>
                             <i
-                              class="btn btn-danger btn-lg fas fa-trash-alt"
+                              class="btn btn-danger btn-md fas fa-trash-alt"
                               onclick="deleteslider('<%= classes._id %>');"
                             ></i>
                           </td>
@@ -110,7 +119,7 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Class</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add Schedule</h5>
           <button
             type="button"
             class="btn-close"
@@ -141,6 +150,22 @@
                 </select>
               </div>
               <div class="mb-3">
+                <label>Trainer: </label>
+                <select
+                  class="form-control show-tick ms select2"
+                  data-placeholder="Select"
+                  name="trainer_id"
+                  id="trainer_id"
+                >
+                  <option value="" disabled selected>Select</option>
+                  <% trainer_id.forEach(function(trainer_id){%>
+                  <option value="<%= trainer_id._id %>">
+                    <%= trainer_id.name %>
+                  </option>
+                  <% }); %>
+                </select>
+              </div>
+              <!-- <div class="mb-3">
                 <label>Title: </label>
                 <input
                   type="text"
@@ -149,7 +174,7 @@
                   name="title"
                   placeholder="Title"
                 />
-              </div>
+              </div> -->
               <div class="mb-3">
                 <label>Zoom Link: </label>
                 <input
@@ -160,45 +185,49 @@
                   placeholder="Zoom link"
                 />
               </div>
-              <div class="mb-3">
-                <label>Meeting Id: </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="meeting_id"
-                  name="meeting_id"
-                  placeholder="Meeting Id"
-                />
+              <div class="row">
+                <div class="mb-3 w-50">
+                  <label>Meeting Id: </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="meeting_id"
+                    name="meeting_id"
+                    placeholder="Meeting Id"
+                  />
+                </div>
+                <div class="mb-3 w-50">
+                  <label>Meeting Password: </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="meeting_password"
+                    name="meeting_password"
+                    placeholder="Meeting Password"
+                  />
+                </div>
               </div>
-              <div class="mb-3">
-                <label>Meeting Password: </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="meeting_password"
-                  name="meeting_password"
-                  placeholder="Meeting Password"
-                />
-              </div>
-              <div class="mb-3">
-                <label>Date: </label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="date"
-                  name="date"
-                  placeholder="Date"
-                />
-              </div>
-              <div class="mb-3">
-                <label>Time: </label>
-                <input
-                  type="time"
-                  class="form-control"
-                  id="time"
-                  name="time"
-                  placeholder="Time"
-                />
+              <div class="row">
+                <div class="mb-3 w-50">
+                  <label>Date: </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="date"
+                    name="date"
+                    placeholder="Date"
+                  />
+                </div>
+                <div class="mb-3 w-50">
+                  <label>Time: </label>
+                  <input
+                    type="time"
+                    class="form-control"
+                    id="time"
+                    name="time"
+                    placeholder="Time"
+                  />
+                </div>
               </div>
               <button
                 type="submit"
@@ -218,11 +247,11 @@
 
   <!-- Modal body -->
   <div class="modal fade" id="edit">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Edit Class</h4>
+          <h4 class="modal-title">Edit Schedule</h4>
           <button type="button" class="close" data-dismiss="modal">
             &times;
           </button>
@@ -245,11 +274,29 @@
               >
                 <option value="" disabled selected>Select</option>
                 <% user_id.forEach(function(user_id){%>
-                <option value="<%= user_id._id %>"><%= user_id.name %></option>
+                <option value="<%= user_id._id %>">
+                  <%= user_id.name %>
+                </option>
                 <% }); %>
               </select>
             </div>
             <div class="mb-3">
+              <label>Trainer: </label>
+              <select
+                class="form-control show-tick ms select2"
+                data-placeholder="Select"
+                name="trainer_id"
+                id="edit_trainer_id"
+              >
+                <option value="" disabled selected>Select</option>
+                <% trainer_id.forEach(function(trainer_id){%>
+                <option value="<%= trainer_id._id %>">
+                  <%= trainer_id.name %>
+                </option>
+                <% }); %>
+              </select>
+            </div>
+            <!-- <div class="mb-3">
               <label>Edit Title</label>
               <input
                 id="edit_title"
@@ -258,7 +305,7 @@
                 class="form-control"
                 placeholder="Enter Title"
               />
-            </div>
+            </div> -->
             <div class="mb-3">
               <label>Edit Zoom Link</label>
               <input
@@ -270,45 +317,49 @@
               />
             </div>
 
-            <div class="mb-3">
-              <label>Edit Meeting Id</label>
-              <input
-                id="edit_meeting_id"
-                name="meeting_id"
-                type="text"
-                class="form-control"
-                placeholder="Enter Meeting Id"
-              />
+            <div class="row">
+              <div class="mb-3 w-50">
+                <label>Edit Meeting Id</label>
+                <input
+                  id="edit_meeting_id"
+                  name="meeting_id"
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Meeting Id"
+                />
+              </div>
+              <div class="mb-3 w-50">
+                <label>Edit Meeting password</label>
+                <input
+                  id="edit_meeting_password"
+                  name="meeting_password"
+                  type="password"
+                  class="form-control"
+                  placeholder="Enter password"
+                />
+              </div>
             </div>
-            <div class="mb-3">
-              <label>Edit Meeting password</label>
-              <input
-                id="edit_meeting_password"
-                name="meeting_password"
-                type="password"
-                class="form-control"
-                placeholder="Enter password"
-              />
-            </div>
-            <div class="mb-3">
-              <label>Edit Date</label>
-              <input
-                id="edit_date"
-                name="date"
-                type="date"
-                class="form-control"
-                placeholder="Enter Date"
-              />
-            </div>
-            <div class="mb-3">
-              <label>Edit Time</label>
-              <input
-                type="time"
-                class="form-control"
-                id="edit_time"
-                name="time"
-                placeholder="Enter Time"
-              />
+            <div class="row">
+              <div class="mb-3 w-50">
+                <label>Edit Date</label>
+                <input
+                  id="edit_date"
+                  name="date"
+                  type="date"
+                  class="form-control"
+                  placeholder="Enter Date"
+                />
+              </div>
+              <div class="mb-3 w-50">
+                <label>Edit Time</label>
+                <input
+                  type="time"
+                  class="form-control"
+                  id="edit_time"
+                  name="time"
+                  placeholder="Enter Time"
+                />
+              </div>
             </div>
 
             <button
@@ -328,6 +379,10 @@
 <%- include('partials/footer.ejs') %>
 
 <script>
+ $(document).ready(function () {
+    $("#example").DataTable();
+  });
+
   function getFormData($form) {
     var unindexed_array = $form.serializeArray();
     var indexed_array = {};
@@ -350,7 +405,7 @@
     let formData = $("form");
     let data = {
       user_id: $("#user_id").val(),
-      title: $("#title").val(),
+      trainer_id: $("#trainer_id").val(),
       link: $("#link").val(),
       date: $("#date").val(),
       time: $("#time").val(),
@@ -386,7 +441,7 @@
     var data = finalData;
     $("#editid").val(data._id);
     $("#edit_user_id").val(data.user_id._id);
-    $("#edit_title").val(data.title);
+    $("#edit_trainer_id").val(data.trainer_id._id);
     $("#edit_link").val(data.link);
     $("#edit_date").val(data.date);
     $("#edit_time").val(data.time);
@@ -444,7 +499,7 @@
             renderToast({ message: res.message, icon: "success" });
             setTimeout(() => {
               window.location.reload();
-            }, 2000);
+            }, 1000);
           }
         })
         .fail(function (xhr, status, error) {

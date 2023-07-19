@@ -14,13 +14,7 @@
     width: 300px;
   }
 
-  #display-image {
-    width: 191px;
-    height: 125px !important;
-    margin-top: 32px;
-    background-position: center;
-    background-size: cover;
-  }
+
 </style>
 <!-- end of multipart select -->
 
@@ -48,6 +42,26 @@
                     >
                       <div class="row mg-b-25">
                         <div id="output"></div>
+                        <div class="col-lg-4">
+                          <div class="form-group">
+                            <label class="form-control-label"> Category:</label>
+                            <div class="form-group add-university-form">
+                              <select
+                                data-placeholder="Choose Category..."
+                                id="select_category"
+                                name="category"
+                                multiple
+                                class="chosen-select"
+                              >
+                                <% categories.forEach(function(element) { %>
+                                <option value="<%= element._id %>">
+                                  <%= element.name %>
+                                </option>
+                                <% }); %>
+                              </select>             
+                            </div>
+                          </div>
+                        </div>
                         <div class="col-lg-4">
                           <div class="form-group">
                             <label class="form-control-label"> Name:</label>
@@ -224,6 +238,49 @@
                         </div>
                         <div class="col-lg-4">
                           <div class="form-group">
+                            <label class="form-control-label">Rating:</label>
+                            <div class="input-group">
+                              <input
+                                class="form-control"
+                                name="rating"
+                                id="rating"
+                                type="number"
+                                placeholder="Enter Rating"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="form-group">
+                            <label class="form-control-label">People Trained:</label>
+                            <div class="input-group">
+                              <input
+                                class="form-control"
+                                name="people_trained"
+                                id="people_trained"
+                                type="number"
+                                placeholder="Enter People Trained"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="form-group">
+                            <label class="form-control-label">Website Description:</label>
+                            <div class="input-group">
+                              <input
+                                class="form-control"
+                                name="website_desc"
+                                id="website_desc"
+                                type="text"
+                                placeholder="Enter Website Description"
+                                textarea="100px"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="form-group">
                             <label class="form-control-label">Photo:</label>
                             <div class="input-group">
                               <input
@@ -280,7 +337,7 @@
 <!-- multipart select -->
 <script>
   document.getElementById("output").innerHTML = location.search;
-  $(".chosen-select").chosen();
+  $("#select_category").chosen();
 </script>
 
 <script>

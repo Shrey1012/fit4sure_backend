@@ -1,10 +1,7 @@
 const router = require("express").Router();
 const { NotLoggedIn } = require("../../middlewares/Adminauth");
-const Adminauth = require("../../models/Adminauth");
+const { dashboardData } = require('../../controllers/admin/dashboardController')
 
-router.get("/dashboard", NotLoggedIn, async (req, res) => {
-  const admin = await Adminauth.find({});
-  return res.render("admin/dashboard" , {admin});
-});
+router.get("/dashboard", NotLoggedIn, dashboardData);
 
 module.exports = router;

@@ -5,10 +5,9 @@ const ClassSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  title: {
-    type: String,
-    required: false,
-    default: null,
+  trainer_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Trainer",
   },
   link: {
     type: String,
@@ -18,8 +17,12 @@ const ClassSchema = new mongoose.Schema({
   datetime: {
     type: Date,
     required: false,
-    default: Date.now,
+    default: new Date().toLocaleDateString(),
   },
+  calender_date: {
+    type: String,
+    default: null,
+},
   meeting_id: {
     type: String,
     required: false,
@@ -38,6 +41,10 @@ const ClassSchema = new mongoose.Schema({
   time: {
     type: String,
     default: null,
+  },
+  status: {
+    type: String,
+    default: "Pending",
   },
   created_at: {
     type: String,

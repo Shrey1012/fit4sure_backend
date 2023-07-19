@@ -1007,7 +1007,7 @@ class ApiController {
       const slider = Support({
         name: req.body.name,
         email: req.body.email,
-        mobile_number: req.body.mobile_number,
+        mobile_number: req.body.contactNumber,
         text: req.body.text,
         user_id: user._id,
       });

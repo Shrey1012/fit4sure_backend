@@ -6,23 +6,17 @@
       <div class="row">
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div
-              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
-            >
-              <p
-                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
-              ></p>
-              <div
-                class="card-icon d-flex align-items-center justify-content-center"
-              >
-                <i class="fas fa-calendar-check"></i>
+            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
+              <div class="card-icon d-flex align-items-center justify-content-center">
+                <i class="fas fa-dollar-sign"></i>
               </div>
-              Today Booking
+              Today Booking Amount
               <p></p>
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold">0</h3>
+                <h3 class="card-title fs-18 font-weight-bold"><%= todayOrderData[0]?.todayAmount?todayOrderData[0]?.todayAmount:0 %></h3>
               </div>
             </div>
           </div>
@@ -30,18 +24,12 @@
 
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div
-              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
-            >
+            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
               <!-- <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="material-icons">today</i>
                   </div> -->
-              <p
-                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
-              ></p>
-              <div
-                class="card-icon d-flex align-items-center justify-content-center"
-              >
+              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
+              <div class="card-icon d-flex align-items-center justify-content-center">
                 <i class="fas fa-dollar-sign"></i>
               </div>
               Total Amount
@@ -49,25 +37,19 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold">36k</h3>
+                <h3 class="card-title fs-18 font-weight-bold"><%= dashboardData[0]?.totalAmount %></h3>
               </div>
             </div>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div
-              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
-            >
+            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
               <!-- <div class="card-icon d-flex align-items-center justify-content-center">
                     <i class="material-icons">today</i>
                 </div> -->
-              <p
-                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
-              ></p>
-              <div
-                class="card-icon d-flex align-items-center justify-content-center"
-              >
+              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
+              <div class="card-icon d-flex align-items-center justify-content-center">
                 <i class="fas fa-user-circle"></i>
               </div>
               Total Customer
@@ -75,30 +57,64 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold">12</h3>
+                <h3 class="card-title fs-18 font-weight-bold"><%= dashboardData[0]?.totalUsers %></h3>
               </div>
             </div>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div
-              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
-            >
-              <p
-                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
-              ></p>
-              <div
-                class="card-icon d-flex align-items-center justify-content-center"
-              >
+            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
+              <div class="card-icon d-flex align-items-center justify-content-center">
                 <i class="fas fa-calendar-minus"></i>
               </div>
-              Today Booking
+              Total Classes
               <p></p>
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold">4</h3>
+                <h3 class="card-title fs-18 font-weight-bold"><%= dashboardData[0]?.totalClasses %></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+          <div class="card card-stats statistic-box mb-4">
+            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+              <!-- <div class="card-icon d-flex align-items-center justify-content-center">
+                      <i class="material-icons">today</i>
+                  </div> -->
+              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
+              <div class="card-icon d-flex align-items-center justify-content-center">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              Last 7 days Amount
+              <p></p>
+            </div>
+            <div class="d-card-footer p-3 text-center">
+              <div class="stats">
+                <h3 class="card-title fs-18 font-weight-bold"><%= last7daysAmount[0]?.todayAmount?last7daysAmount[0]?.todayAmount:0 %></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+          <div class="card card-stats statistic-box mb-4">
+            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+              <!-- <div class="card-icon d-flex align-items-center justify-content-center">
+                      <i class="material-icons">today</i>
+                  </div> -->
+              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
+              <div class="card-icon d-flex align-items-center justify-content-center">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              Last 30 days Amount
+              <p></p>
+            </div>
+            <div class="d-card-footer p-3 text-center">
+              <div class="stats">
+                <h3 class="card-title fs-18 font-weight-bold"><%= last30daysAmount[0]?.todayAmount?last30daysAmount[0]?.todayAmount:0 %></h3>
               </div>
             </div>
           </div>
@@ -109,14 +125,38 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h6>Total Booking History</h6>
+              <h6>Last 10 Users list:</h6>
             </div>
             <div class="card-body">
-              <div
-                class="resize-tigger"
-                style="min-width: 300px; height: 300px; margin: 0 auto"
-              >
-                <canvas id="byChart"></canvas>
+              <div class="row">
+                <div class="col-12">
+                  <div class="table-responsive p-2">
+                    <table id="example" class="table table-md">
+                      <thead>
+                        <tr class="text-center">
+                          <th>Name</th>
+                          <th>Mobile</th>
+                          <th>City</th>
+                          <th>Created Date</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-center">
+                        <% if(!dashboardData[0]?.users[0]) { %>
+                        <tr>
+                          <td colspan="100%">No Data</td>
+                        </tr>
+                        <% } else {%> <% dashboardData[0].users.forEach(function(user){%>
+                        <tr>
+                          <td width="10%"><%= user?.first_name+" "+user?.last_name %></td>
+                          <td width="10%"><%= user?.mobile_number %></td>
+                          <td width="10%"><%= user?.city %></td>
+                          <td width="10%"><%= user?.created_at %></td>
+                        </tr>
+                        <% }); %> <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -124,41 +164,63 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h6>Total Reservation</h6>
+              <h6>Last 10 Bookings list:</h6>
             </div>
             <div class="card-body">
               <div class="resize-tigger">
-                <div
-                  id="linechart"
-                  style="min-width: 300px; height: 300px; margin: 0 auto"
-                ></div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="table-responsive p-2">
+                      <table id="example" class="table table-md">
+                        <thead>
+                          <tr class="text-center">
+                            <th>User</th>
+                            <th>Astrologer</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody class="text-center">
+                          <% if(!dashboardData[0]?.classes[0]) { %>
+                          <tr>
+                            <td colspan="100%">No Data</td>
+                          </tr>
+                          <% } else {%> <% dashboardData[0].classes.forEach(function(classes){%>
+                          <tr>
+                            <td width="10%"><%= classes?.user[0]?.first_name+" "+classes?.user[0]?.first_name  %></td>
+                            <td width="10%"><%= classes?.astrologer[0]?.name %></td>
+                            <td width="10%"><%= classes.date %></td>
+                            <td width="10%"><%= classes.time %></td>
+                            <td width="10%"><%= classes.status %></td>
+                          </tr>
+                          <% }); %> <% } %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h6>Total Booking Amount vs Total Number of Booking</h6>
+              <h6>Last 10 users list:</h6>
             </div>
             <div class="card-body">
-              <div
-                class="resize-tigger"
-                style="min-width: 300px; height: 300px; margin: 0 auto"
-              >
+              <div class="resize-tigger" style="min-width: 300px; height: 300px; margin: 0 auto">
                 <h6>Customer Reservation</h6>
                 <div>
                   <canvas id="coloumchart"></canvas>
                 </div>
               </div>
 
-              <div
-                class="resize-tigger"
-                style="min-width: 300px; height: 300px; margin: 0 auto"
-              >
+              <div class="resize-tigger" style="min-width: 300px; height: 300px; margin: 0 auto">
                 <div>
                   <canvas id="coloumchart2"></canvas>
                 </div>
@@ -176,24 +238,17 @@
                 </div>
               </div>
             </div>
-            <div
-              class="card-body p-2"
-              style="
+            <div class="card-body p-2" style="
                 min-width: 300px;
                 height: 300px;
                 margin: 0 auto;
                 overflow: auto;
-              "
-            >
+              ">
               <div class="message_inner1">
-                <div
-                  class="message_widgets height_320_position ps ps--active-y"
-                >
+                <div class="message_widgets height_320_position ps ps--active-y">
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name :Gaurav test</strong
-                      >
+                      <strong class="inbox-item-author">Name :Gaurav test</strong>
                     </p>
                     <p class="inbox-item-text">Phone:45445454545</p>
                     <p class="inbox-item-text">Emailgaurav.soni@nin.com</p>
@@ -201,9 +256,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name :Mr abdul saharukh khan khan</strong
-                      >
+                      <strong class="inbox-item-author">Name :Mr abdul saharukh khan khan</strong>
                     </p>
                     <p class="inbox-item-text">Phone:8637256629</p>
                     <p class="inbox-item-text">Email</p>
@@ -213,9 +266,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name :Mr soumendra parida parida</strong
-                      >
+                      <strong class="inbox-item-author">Name :Mr soumendra parida parida</strong>
                     </p>
                     <p class="inbox-item-text">Ph+ 9107008441989</p>
                     <p class="inbox-item-text">
@@ -225,9 +276,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : Mr sachin kumar kumar</strong
-                      >
+                      <strong class="inbox-item-author">Name : Mr sachin kumar kumar</strong>
                     </p>
                     <p class="inbox-item-text">Phone: +9189080701193233</p>
                     <p class="inbox-item-text">
@@ -237,10 +286,8 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : Mr chinmaya prasad mohanty prasad
-                        mohanty</strong
-                      >
+                      <strong class="inbox-item-author">Name : Mr chinmaya prasad mohanty prasad
+                        mohanty</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 918637226572</p>
                     <p class="inbox-item-text">Email</p>
@@ -248,9 +295,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : anuj chandan nayak</strong
-                      >
+                      <strong class="inbox-item-author">Name : anuj chandan nayak</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 9658088321</p>
                     <p class="inbox-item-text">Email anujchandan@gmail.com</p>
@@ -258,9 +303,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : chinmaya prasad mohanty</strong
-                      >
+                      <strong class="inbox-item-author">Name : chinmaya prasad mohanty</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 8637226527</p>
                     <p class="inbox-item-text">
@@ -272,9 +315,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : soumajit das</strong
-                      >
+                      <strong class="inbox-item-author">Name : soumajit das</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 9040028616</p>
                     <p class="inbox-item-text">Email soumajitdas@gmail.com</p>
@@ -282,9 +323,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : sachin kumar behera</strong
-                      >
+                      <strong class="inbox-item-author">Name : sachin kumar behera</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 8908070119</p>
                     <p class="inbox-item-text">Email sachin.behera@9vn.in</p>
@@ -294,9 +333,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : soumendra parida</strong
-                      >
+                      <strong class="inbox-item-author">Name : soumendra parida</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 7008441989</p>
                     <p class="inbox-item-text">
@@ -308,9 +345,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : jeet love</strong
-                      >
+                      <strong class="inbox-item-author">Name : jeet love</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 07735953646</p>
                     <p class="inbox-item-text">
@@ -320,9 +355,7 @@
                   </div>
                   <div class="inbox-item">
                     <p class="margin_padding">
-                      <strong class="inbox-item-author"
-                        >Name : Pranab Panda</strong
-                      >
+                      <strong class="inbox-item-author">Name : Pranab Panda</strong>
                     </p>
                     <p class="inbox-item-text">Phone: 9937005640</p>
                     <p class="inbox-item-text">
@@ -334,21 +367,10 @@
                     </p>
                   </div>
                   <div class="ps__rail-x" style="left: 0px; top: 0px">
-                    <div
-                      class="ps__thumb-x"
-                      tabindex="0"
-                      style="left: 0px; width: 0px"
-                    ></div>
+                    <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px"></div>
                   </div>
-                  <div
-                    class="ps__rail-y"
-                    style="top: 0px; height: 320px; right: 0px"
-                  >
-                    <div
-                      class="ps__thumb-y"
-                      tabindex="0"
-                      style="top: 0px; height: 88px"
-                    ></div>
+                  <div class="ps__rail-y" style="top: 0px; height: 320px; right: 0px">
+                    <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 88px"></div>
                   </div>
                 </div>
               </div>
@@ -361,13 +383,10 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header">
-              <h6>Total Booking List</h6>
+              <h6>Last 10 Booking List:</h6>
             </div>
             <div class="card-body">
-              <div
-                class="resize-tigger"
-                style="min-width: 300px; height: 300px; margin: 0 auto"
-              ></div>
+              <div class="resize-tigger" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
             </div>
           </div>
         </div>
@@ -381,18 +400,15 @@
                 </div>
               </div>
             </div>
-            <div
-              class="card-body p-2"
-              style="
+            <div class="card-body p-2" style="
                 min-width: 300px;
                 height: 300px;
                 margin: 0 auto;
                 overflow: auto;
-              "
-            ></div>
+              "></div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </section>
 </div>

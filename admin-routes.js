@@ -42,6 +42,7 @@ const web_stories = require("./routes/admin/web_stories");
 const web_careers = require("./routes/admin/web_careers");
 const web_hero = require("./routes/admin/web_hero");
 const web_userContactInfo = require("./routes/admin/web_userContactInfo");
+const category = require("./routes/admin/category");
 
 const AdminRoutes = (app) => {
   app.use("/", main);
@@ -87,6 +88,7 @@ const AdminRoutes = (app) => {
   app.use("/admin/web_careers", web_careers);
   app.use("/admin/web_hero", web_hero);
   app.use("/admin/web_userContactInfo", web_userContactInfo);
+  app.use("/admin/category", category);
 };
 
 module.exports = AdminRoutes;

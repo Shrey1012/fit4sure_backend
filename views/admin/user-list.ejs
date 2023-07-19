@@ -28,9 +28,8 @@
                           <th>Image</th>
                           <th>Name</th>
                           <th>Mobile</th>
-                          <th>Age</th>
-                          <th>City</th>
-                          <th>Gender</th>
+                          <th>Date of Birth</th>
+                          <th>State of Residence</th>
                           <th>Status</th>
                           <th>Created At</th>
                         </tr>
@@ -47,17 +46,18 @@
                           <td>
                             <img
                               alt="file"
-                              src="/uploads/profile/<%= recordData.image %>"
+                              src=<%= recordData.image %>
                               height="50px"
                               width="50px"
                             />
                           </td>
 
-                          <td><%= recordData.name %></td>
+                          <td>
+                            <a href="/admin/users/details/<%= recordData._id %>"><%= recordData.name %> </a>
+                          </td>
                           <td><%= recordData.contactNumber %></td>
-                          <td><%= recordData.age %></td>
-                          <td><%= recordData.city %></td>
-                          <td><%= recordData.gender %></td>
+                          <td><%= recordData.dateOfBirth %></td>
+                          <td><%= recordData.stateOfResidence %></td>
                           <td>
                             <button
                               class="btn <%- recordData.approved ? 'bg-success' : 'bg-danger' %> text-white"
