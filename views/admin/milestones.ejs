@@ -1,9 +1,4 @@
 <%- include('partials/header.ejs') %>
-<style>
-  td {
-    width: 100px !important;
-  }
-</style>
 
 <div class="main-content">
   <section class="section">
@@ -16,7 +11,7 @@
               style="height: 70px; background-color: #6fd943"
             >
               <div class="col-12">
-                <h4 class="float-left">Package</h4>
+                <h4 class="float-left">Milestones</h4>
                 <div class="head-right-btn">
                   <button
                     class="btn btn-sm btn-secondary float-right card-text-btn"
@@ -31,9 +26,9 @@
                       data-title="Invite New User"
                       data-toggle="tooltip"
                       title=""
-                      data-bs-original-title="Add Package"
+                      data-bs-original-title="Add Milestone"
                     >
-                      Add
+                      Add Milestone
                     </a>
                   </button>
                 </div>
@@ -45,41 +40,38 @@
                 <div class="col-12">
                   <div class="table-responsive p-2">
                     <table class="table table-bordered table-md">
-                      <thead style="width: 80%">
+                      <thead>
                         <tr class="text-center">
-                          <th>Image</th>
-                          <th>Title</th>
-                          <th>Description</th>
-                          <th>Delete</th>
+                          <th>Coaches</th>
+                          <th>Success Rate</th>
+                          <th>Lives Impacted</th>
+                          <th>Users In India</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
 
-                      <tbody class="text-center">
-                        <% if(!packages[0]){ %>
+                      <tbody>
+                        <% if(!milestones[0]) { %>
                         <tr>
                           <td colspan="100%">No Data</td>
                         </tr>
-                        <% } else {%><% packages.forEach(function(packages){ %>
-                        <tr>
-                          <td>
-                            <img
-                              src="/uploads/package/<%= packages.image %> "
-                              alt="image"
-                              height="50px"
-                              width="50px"
-                            />
-                          </td>
+                        <% } else {%> <% milestones.forEach(function(milestone){
+                        %>
+                        <tr class="text-center">
+                          <td><%= milestone.coaches %></td>
+                          <td><%= milestone.success_rate %></td>
+                          <td><%= milestone.lives_impacted %></td>
+                          <td><%= milestone.users_in_india %></td>
 
-                          <td><%= packages.title %></td>
-                          <td><%= packages.description %></td>
                           <td>
                             <i
                               class="btn btn-danger btn-lg fas fa-trash-alt"
-                              onclick="deletepackage('<%= packages.id %>');"
+                              onclick="deletemilestone('<%= milestone._id %>');"
                             ></i>
                           </td>
                         </tr>
-                        <% }) } %>
+
+                        <% }); %> <% } %>
                       </tbody>
                     </table>
                   </div>
@@ -97,7 +89,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Package</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add Milestone</h5>
           <button
             type="button"
             class="btn-close"
@@ -109,32 +101,48 @@
           <div class="modal-body">
             <form
               id="addform"
-              class="mx-5 form-group font-weight-bold showcursor: true"
+              class="form-group font-weight-bold showcursor: true"
             >
-              <div class="mb-3">
-                <label>Image: </label>
+              <div class="mb-3 d-grid gap-2 col-12 mx-auto">
+                <label for="coaches" class="form-label">Coaches</label>
                 <input
-                  type="file"
+                  name="coaches"
+                  id="coaches"
                   class="form-control"
-                  id="image"
-                  name="image"
-                  accept="image/*"
+                  placeholder="Coaches"
                 />
               </div>
-              <div class="mb-3">
-                <label>Title: </label>
+              <div class="mb-3 d-grid gap-2 col-12 mx-auto">
+                <label for="success_rate" class="form-label"
+                  >Success Rate</label>
                 <input
-                  type="text"
+                  id="success_rate"
+                  name="success_rate"
                   class="form-control"
-                  id="title"
-                  name="title"
-                  placeholder="Title"
+                  placeholder="Success Rate"
                 />
               </div>
-              <div class="mb-3">
-                <label>Description: </label>
-                <textarea class="form-control" name="description"></textarea>
+              <div class="mb-3 d-grid gap-2 col-12 mx-auto">
+                <label for="lives_impacted" class="form-label"
+                  >Lives Impacted</label>
+                <input
+                  id="lives_impacted"
+                  name="lives_impacted"
+                  class="form-control"
+                  placeholder="Lives Impacted"
+                />
               </div>
+              <div class="mb-3 d-grid gap-2 col-12 mx-auto">
+                <label for="users_in_india" class="form-label"
+                  >Users In India</label>
+                <input
+                  id="users_in_india"
+                  name="users_in_india"
+                  class="form-control"
+                  placeholder="Users In India"
+                />
+              </div>
+
               <button
                 type="submit"
                 class="btn mt-3 pull-right"
@@ -155,26 +163,41 @@
 <%- include ('partials/footer.ejs') %>
 
 <script>
-  var addform = $("#addform");
-  addform.on("submit", addsubmitHandler);
+  function getFormData($form) {
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
 
-  function addsubmitHandler(e) {
+    $.map(unindexed_array, function (n, i) {
+      indexed_array[n["name"]] = n["value"];
+    });
+
+    return indexed_array;
+  }
+
+  const form = $("#addform");
+
+  form.on("submit", submitHandler);
+
+  function submitHandler(e) {
     e.preventDefault();
 
     // PREPARE FORM DATA
-    var formData = new FormData(addform[0]);
-    console.log(formData);
+    let formData = $("form");
+    let data = {
+        coaches: $("#coaches").val(),
+        success_rate: $("#success_rate").val(),
+        lives_impacted: $("#lives_impacted").val(),
+        users_in_india: $("#users_in_india").val(),
+    };
 
-    // // DO POST
+    // DO POST
     $.ajax({
       type: "POST",
-      cache: false,
-      enctype: "multipart/form-data",
-      processData: false,
-      contentType: false,
-      url: "/admin/package/add",
-      data: formData,
+      contentType: "application/json",
+      url: "/admin/milestones/add",
+      data: JSON.stringify(data),
     })
+
       .done((res) => {
         if (res.error == true) {
           renderToast({ message: res.message, icon: "error" });
@@ -190,15 +213,14 @@
       });
   }
 </script>
-
 <script>
-  function deletepackage(id) {
+  function deletemilestone(id) {
     if (confirm("Do you really want to delete this record")) {
       // DO POST
       $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/admin/package/delete",
+        url: "/admin/milestones/delete",
         data: JSON.stringify({
           id: id,
         }),
@@ -210,7 +232,7 @@
             renderToast({ message: res.message, icon: "success" });
             setTimeout(() => {
               window.location.reload();
-            }, 1000);
+            }, 2000);
           }
         })
         .fail(function (xhr, status, error) {

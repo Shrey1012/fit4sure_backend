@@ -38,11 +38,11 @@ const schema = new mongoose.Schema({
   },
   created_at: {
     type: String,
-    default: Date.now,
+    default: new Date().toLocaleDateString(),
   },
   updated_at: {
     type: String,
-    default: Date.now,
+    default: new Date().toLocaleDateString(),
   },
 });
 

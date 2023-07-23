@@ -1,26 +1,23 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  payment_id: {
+  who_we_are: {
     type: String,
     require: true,
   },
-  order_id: {
+  description: {
     type: String,
     require: true,
   },
-  signature: {
-    type: String,
-    require: true,
-  },
+
   created_at: {
     type: String,
-    default: new Date().toLocaleDateString(),
+    default: Date.now,
   },
   updated_at: {
     type: String,
-    default: new Date().toLocaleDateString(),
+    default: Date.now,
   },
 });
 
-moduel.exports = mongoose.model("Razorpaycheckout", schema);
+module.exports = mongoose.model("Web-Aboutus", schema);

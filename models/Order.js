@@ -10,14 +10,23 @@ const schema = new mongoose.Schema({
     ref: "User",
     default: null,
   },
-  package_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Package",
-    default: null,
-  },
-  plan_id: {
+  subscription_plan_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Plan",
+    default: null,
+  },
+  trainer_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Trainer",
+    default: null,
+  },
+  duration: {
+    type: String,
+    default: null,
+  },
+  amount: {
+    type: Number,
+    require: true,
   },
   duration: {
     type: String,
@@ -43,11 +52,11 @@ const schema = new mongoose.Schema({
   },
   created_at: {
     type: String,
-    default: Date.now,
+    default: new Date().toLocaleDateString(),
   },
   updated_at: {
     type: String,
-    default: Date.now,
+    default: new Date().toLocaleDateString(),
   },
 });
 

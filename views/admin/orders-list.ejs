@@ -21,18 +21,17 @@
               <div class="row">
                 <div class="col-12">
                   <div class="table-responsive p-2">
-                    <table class="table table-bordered table-md">
+                    <table id="example" class="table table-bordered table-md">
                       <thead class="t-head">
                         <tr>
                             <th>S.No</th>
-                            <th>User Id</th>
-                            <th>Mobile Number</th>
-                            <th>Package</th>
-                            <th>Plan</th>
-                            <th>Amount</th>
-                            <th>Order Id</th>
-                            <th>Receipt Id</th>
-                            <th>Date</th>
+                          <th>User Id</th>
+                          <th>Trainer</th>
+                          <th>Subscription Plan</th>
+                          <th>Amount</th>
+                          <th>Order Id</th>
+                          <th>Receipt Id</th>
+                          <th>Date</th>
                         </tr>
                       </thead>
 
@@ -43,16 +42,25 @@
                         </tr>
                         <% } else {%> <% paymentData.forEach(function(paymentData,index){ %>
                         <tr>
-                            <td><%= index+1 %></td>
-                            <td><%= paymentData.user_id ? paymentData.user_id.name : " " %></td>
-                            <td><%= paymentData.user_id ? paymentData.user_id.mobile_number : " " %></td>
-                            <td><%= paymentData.package_id ? paymentData.package_id.title : " " %></td>
-                            <td><%= paymentData.plan_id ? paymentData.plan_id.title : " " %></td>
-                            <td><%= paymentData.amount %></td>
-                            <td><%= paymentData.order_id %></td>
-                            <td><%= paymentData.receipt_id %></td>
+                          <td><%= index+1 %></td>
                           <td>
-                            <%= convertTimeStampToDate(paymentData.created_at) %>
+                            <%= paymentData.user_id ?
+                            paymentData.user_id.name : " "%>
+                          </td>
+                          <td>
+                            <%= paymentData.trainer_id ? paymentData.trainer_id.name
+                            : " " %>
+                          </td>
+                          <td>
+                            <%= paymentData.subscription_plan_id ? paymentData.subscription_plan_id.month
+                            : " " %> Month
+                          </td>
+                          <td><%= paymentData.amount %></td>
+                          <td><%= paymentData.order_id %></td>
+                          <td><%= paymentData.receipt_id %></td>
+                          <td>
+                            <%= new Date(paymentData.created_at).toLocaleDateString('en-GB')
+                            %>
                           </td>
                         </tr>
                         <% }); %> <% } %>
@@ -70,6 +78,7 @@
   </section>
 </div>
 <!-- Main Content -->
+
 <%
 function convertTimeStampToDate(date){
    date = Number(date)
@@ -88,4 +97,10 @@ function convertTimeStampToDate(date){
    return [day, month, year].join('-');
 }
 %>
-<%- include ('partials/footer.ejs') %>
+
+ <%- include ('partials/footer.ejs') %>
+<script>
+ $(document).ready(function () {
+  $("#example").DataTable();
+});
+</script>

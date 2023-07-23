@@ -19,7 +19,7 @@ const schema = new mongoose.Schema({
     },
     paid_on: {
         type: String,
-        default: Date.now
+        default: new Date().toLocaleDateString(),
     },
 });
 

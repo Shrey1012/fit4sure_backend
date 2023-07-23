@@ -36,10 +36,10 @@ const dashboardData = async (req, res) => {
                         }
                     }, {
                         '$lookup': {
-                            'from': 'astrologers',
-                            'localField': 'astrologer_id',
+                            'from': 'trainers',
+                            'localField': 'trainer_id',
                             'foreignField': '_id',
-                            'as': 'astrologer'
+                            'as': 'trainer'
                         }
                     }
                 ],
@@ -71,44 +71,26 @@ const dashboardData = async (req, res) => {
                     '$size': '$classes'
                 }
             }
-        }, {
-            '$unwind': {
-                'path': '$classes',
-                'preserveNullAndEmptyArrays': true
-            }
-        }, {
-            '$unwind': {
-                'path': '$users',
-                'preserveNullAndEmptyArrays': true
-            }
-        }, {
-            '$sort': {
-                'classes.created_at': -1,
-                'users.created_at': -1
-            }
-        }, {
-            '$limit': 10
-        }, {
-            '$group': {
-                '_id': null,
-                'totalAmount': {
-                    '$first': '$totalAmount'
-                },
-                'totalUsers': {
-                    '$first': '$totalUsers'
-                },
-                'totalClasses': {
-                    '$first': '$totalClasses'
-                },
-                'users': {
-                    '$push': '$users'
-                },
-                'classes': {
-                    '$push': '$classes'
-                }
-            }
-        }
-    ]
+        }, 
+
+        {
+            '$limit': 10,
+          },
+          {
+            '$project': {
+              'users': {
+                '$slice': ['$users', 10], // Limit users to 10
+              },
+              'classes': {
+                '$slice': ['$classes', 10], // Limit classes to 10
+              },
+              'totalUsers': 1,
+              'totalClasses': 1,
+              'totalAmount': 1,
+            },
+          },
+        ];
+      
 
     const condition = [
         {
@@ -142,7 +124,10 @@ const dashboardData = async (req, res) => {
         {
             '$addFields': {
                 'created_at': {
-                    '$toDate': '$created_at'
+                    '$dateFromString': {
+                        'dateString': '$created_at',
+                        'format': '%d/%m/%Y'
+                    }
                 },
                 'currentDate': {
                     '$toDate': before7daysDate
@@ -170,7 +155,10 @@ const dashboardData = async (req, res) => {
         {
             '$addFields': {
                 'created_at': {
-                    '$toDate': '$created_at'
+                    '$dateFromString': {
+                        'dateString': '$created_at',
+                        'format': '%d/%m/%Y'
+                    }
                 },
                 'currentDate': {
                     '$toDate': before30daysDate

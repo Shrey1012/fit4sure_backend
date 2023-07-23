@@ -1,9 +1,4 @@
 <%- include('partials/header.ejs') %>
-<style>
-  td {
-    width: 100px !important;
-  }
-</style>
 
 <div class="main-content">
   <section class="section">
@@ -16,7 +11,7 @@
               style="height: 70px; background-color: #6fd943"
             >
               <div class="col-12">
-                <h4 class="float-left">Package</h4>
+                <h4 class="float-left">Website About Us</h4>
                 <div class="head-right-btn">
                   <button
                     class="btn btn-sm btn-secondary float-right card-text-btn"
@@ -31,7 +26,7 @@
                       data-title="Invite New User"
                       data-toggle="tooltip"
                       title=""
-                      data-bs-original-title="Add Package"
+                      data-bs-original-title="Add About Us"
                     >
                       Add
                     </a>
@@ -45,41 +40,33 @@
                 <div class="col-12">
                   <div class="table-responsive p-2">
                     <table class="table table-bordered table-md">
-                      <thead style="width: 80%">
+                      <thead>
                         <tr class="text-center">
-                          <th>Image</th>
-                          <th>Title</th>
+                          <th>Who we are</th>
                           <th>Description</th>
-                          <th>Delete</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
 
-                      <tbody class="text-center">
-                        <% if(!packages[0]){ %>
+                      <tbody>
+                        <% if(!aboutus[0]) { %>
                         <tr>
                           <td colspan="100%">No Data</td>
                         </tr>
-                        <% } else {%><% packages.forEach(function(packages){ %>
-                        <tr>
-                          <td>
-                            <img
-                              src="/uploads/package/<%= packages.image %> "
-                              alt="image"
-                              height="50px"
-                              width="50px"
-                            />
-                          </td>
+                        <% } else {%> <% aboutus.forEach(function(aboutus){ %>
+                        <tr class="text-center">
+                          <td><%= aboutus.who_we_are %></td>
+                          <td><%= aboutus.description %></td>
 
-                          <td><%= packages.title %></td>
-                          <td><%= packages.description %></td>
                           <td>
                             <i
                               class="btn btn-danger btn-lg fas fa-trash-alt"
-                              onclick="deletepackage('<%= packages.id %>');"
+                              onclick="deleteaboutus('<%= aboutus._id %>');"
                             ></i>
                           </td>
                         </tr>
-                        <% }) } %>
+
+                        <% }); %> <% } %>
                       </tbody>
                     </table>
                   </div>
@@ -97,7 +84,7 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Package</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add Website About Us</h5>
           <button
             type="button"
             class="btn-close"
@@ -109,32 +96,27 @@
           <div class="modal-body">
             <form
               id="addform"
-              class="mx-5 form-group font-weight-bold showcursor: true"
+              class="form-group font-weight-bold showcursor: true"
             >
-              <div class="mb-3">
-                <label>Image: </label>
+              <div class="mb-3 d-grid gap-2 col-12 mx-auto">
+                <label for="who_we_are" class="form-label">Who we are</label>
                 <input
-                  type="file"
+                  name="who_we_are"
+                  id="who_we_are"
                   class="form-control"
-                  id="image"
-                  name="image"
-                  accept="image/*"
+                  placeholder="Who we are"
                 />
               </div>
-              <div class="mb-3">
-                <label>Title: </label>
+              <div class="mb-3 d-grid gap-2 col-12 mx-auto">
+                <label for="description" class="form-label">Decription</label>
                 <input
-                  type="text"
+                  id="description"
+                  name="description"
                   class="form-control"
-                  id="title"
-                  name="title"
-                  placeholder="Title"
+                  placeholder="Decription"
                 />
               </div>
-              <div class="mb-3">
-                <label>Description: </label>
-                <textarea class="form-control" name="description"></textarea>
-              </div>
+
               <button
                 type="submit"
                 class="btn mt-3 pull-right"
@@ -155,26 +137,39 @@
 <%- include ('partials/footer.ejs') %>
 
 <script>
-  var addform = $("#addform");
-  addform.on("submit", addsubmitHandler);
+  function getFormData($form) {
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
 
-  function addsubmitHandler(e) {
+    $.map(unindexed_array, function (n, i) {
+      indexed_array[n["name"]] = n["value"];
+    });
+
+    return indexed_array;
+  }
+
+  const form = $("#addform");
+
+  form.on("submit", submitHandler);
+
+  function submitHandler(e) {
     e.preventDefault();
 
     // PREPARE FORM DATA
-    var formData = new FormData(addform[0]);
-    console.log(formData);
+    let formData = $("form");
+    let data = {
+      who_we_are: $("#who_we_are").val(),
+      description: $("#description").val(),
+    };
 
-    // // DO POST
+    // DO POST
     $.ajax({
       type: "POST",
-      cache: false,
-      enctype: "multipart/form-data",
-      processData: false,
-      contentType: false,
-      url: "/admin/package/add",
-      data: formData,
+      contentType: "application/json",
+      url: "/admin/web_aboutus/add",
+      data: JSON.stringify(data),
     })
+
       .done((res) => {
         if (res.error == true) {
           renderToast({ message: res.message, icon: "error" });
@@ -190,15 +185,14 @@
       });
   }
 </script>
-
 <script>
-  function deletepackage(id) {
+  function deleteaboutus(id) {
     if (confirm("Do you really want to delete this record")) {
       // DO POST
       $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/admin/package/delete",
+        url: "/admin/web_aboutus/delete",
         data: JSON.stringify({
           id: id,
         }),
@@ -210,7 +204,7 @@
             renderToast({ message: res.message, icon: "success" });
             setTimeout(() => {
               window.location.reload();
-            }, 1000);
+            }, 2000);
           }
         })
         .fail(function (xhr, status, error) {

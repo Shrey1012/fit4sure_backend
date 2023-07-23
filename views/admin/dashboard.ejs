@@ -147,9 +147,9 @@
                         </tr>
                         <% } else {%> <% dashboardData[0].users.forEach(function(user){%>
                         <tr>
-                          <td width="10%"><%= user?.first_name+" "+user?.last_name %></td>
-                          <td width="10%"><%= user?.mobile_number %></td>
-                          <td width="10%"><%= user?.city %></td>
+                          <td width="10%"><%= user?.name%></td>
+                          <td width="10%"><%= user?.contactNumber %></td>
+                          <td width="10%"><%= user?.stateOfResidence %></td>
                           <td width="10%"><%= user?.created_at %></td>
                         </tr>
                         <% }); %> <% } %>
@@ -175,7 +175,7 @@
                         <thead>
                           <tr class="text-center">
                             <th>User</th>
-                            <th>Astrologer</th>
+                            <th>Trainer</th>
                             <th>Date</th>
                             <th>Time</th>
                             <th>Status</th>
@@ -188,8 +188,8 @@
                           </tr>
                           <% } else {%> <% dashboardData[0].classes.forEach(function(classes){%>
                           <tr>
-                            <td width="10%"><%= classes?.user[0]?.first_name+" "+classes?.user[0]?.first_name  %></td>
-                            <td width="10%"><%= classes?.astrologer[0]?.name %></td>
+                            <td width="10%"><%= classes?.user[0]?.name%></td>
+                            <td width="10%"><%= classes?.trainer[0]?.name %></td>
                             <td width="10%"><%= classes.date %></td>
                             <td width="10%"><%= classes.time %></td>
                             <td width="10%"><%= classes.status %></td>

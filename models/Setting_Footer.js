@@ -1,12 +1,6 @@
 const mongoose = require("mongoose");
 
 const Schema = new mongoose.Schema({
-    title: {
-        type: String,
-    },
-    logo: {
-        type: String,
-    },
     playstore_link: {
         type: String,
     },

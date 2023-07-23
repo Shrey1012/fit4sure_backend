@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router = require("express").Router(); 
 const { NotLoggedIn } = require("../../middlewares/Adminauth");
 const AboutusController = require("../../controllers/admin/aboutusController");
 

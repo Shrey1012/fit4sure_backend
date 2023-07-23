@@ -5,7 +5,7 @@ class paymentController {
   static list = async (req, res) => {
     try {
       let paymentData = await Order.find()
-        .populate("user_id package_id plan_id")
+        .populate("user_id subscription_plan_id trainer_id")
         .sort({
           created_at: -1,
         });

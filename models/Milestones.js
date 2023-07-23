@@ -1,26 +1,30 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  payment_id: {
+  coaches: {
     type: String,
     require: true,
   },
-  order_id: {
+  success_rate: {
     type: String,
     require: true,
   },
-  signature: {
+  lives_impacted: {
+    type: String,
+    require: true,
+  },
+  users_in_india: {
     type: String,
     require: true,
   },
   created_at: {
     type: String,
-    default: new Date().toLocaleDateString(),
+    default: Date.now,
   },
   updated_at: {
     type: String,
-    default: new Date().toLocaleDateString(),
+    default: Date.now,
   },
 });
 
-moduel.exports = mongoose.model("Razorpaycheckout", schema);
+module.exports = mongoose.model("Milestones", schema);

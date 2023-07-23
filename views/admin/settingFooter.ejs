@@ -11,26 +11,8 @@
               style="height: 70px; background-color: #6fd943"
             >
               <div class="col-12">
-                <h4 class="float-left">Setting Footer</h4>
+                <h4 class="float-left">Footer</h4>
                 <div class="head-right-btn">
-                  <!-- <button
-                    class="btn btn-sm btn-secondary float-right card-text-btn"
-                    type="submit"
-                    data-bs-toggle="modal"
-                    data-bs-target="#myModal"
-                  >
-                    <a
-                      href="#"
-                      data-ajax-popup="true"
-                      data-size="md"
-                      data-title="Invite New User"
-                      data-toggle="tooltip"
-                      title=""
-                      data-bs-original-title="Add settingFooter"
-                    >
-                      Add
-                    </a>
-                  </button> -->
                 </div>
               </div>
             </div>
@@ -38,22 +20,9 @@
             <div class="body mb-5">
               <div class="modal-body mb-5">
                 <form
-                  id="addnewslider"
+                  id="addnew"
                   class="mx-5 form-group font-weight-bold showcursor: true"
                 >
-                  <label for="title" class="form-label">Title</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="title"
-                    name="title"
-                    placeholder="Enter Title"
-                    value="<%= title %>"
-                  />
-                  <div class="mb-3">
-                    <label for="logo" class="form-label">Logo</label>
-                    <input type="file" class="form-control" id="logo" name="logo" />
-                  </div>
                   <div class="mb-3">
                     <label for="playstore_link" class="form-label"
                       >Playstore Link</label
@@ -183,29 +152,44 @@
 <%- include('partials/footer.ejs') %>
 
 <script>
-  $(document).ready(function () {
-    $("#example").DataTable();
-  });
+  function getFormData($form) {
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
 
-  var addForm = $("#addnewslider");
+    $.map(unindexed_array, function (n, i) {
+      indexed_array[n["name"]] = n["value"];
+    });
 
-  addForm.on("submit", addsubmitHandler);
+    return indexed_array;
+  }
 
-  function addsubmitHandler(e) {
+  const form = $("#addnew");
+
+  form.on("submit", submitHandler);
+
+  function submitHandler(e) {
     e.preventDefault();
 
     // PREPARE FORM DATA
-    var formData = new FormData(addForm[0]);
+    let formData = $("form");
+    let data = {
+      facebook_link: $("#facebook_link").val(),
+      twitter_link: $("#twitter_link").val(),
+      instagram_link: $("#instagram_link").val(),
+      playstore_link: $("#playstore_link").val(),
+      appstore_link: $("#appstore_link").val(),
+      youtube_link: $("#youtube_link").val(),
+      description: $("#description").val(),
+    };
 
     // DO POST
     $.ajax({
       type: "POST",
-      enctype: "multipart/form-data",
-      processData: false,
-      contentType: false,
+      contentType: "application/json",
       url: "/admin/setting_footer/add",
-      data: formData,
+      data: JSON.stringify(data),
     })
+
       .done((res) => {
         if (res.error == true) {
           renderToast({ message: res.message, icon: "error" });
@@ -213,14 +197,16 @@
           renderToast({ message: res.message, icon: "success" });
           setTimeout(() => {
             window.location.reload();
-          }, 1000);
+          }, 2000);
         }
       })
       .fail(function (xhr, status, error) {
         console.log(xhr.responseText);
       });
   }
+</script>
 
+<script>
   function deletesettingFooter(id) {
     if (confirm("Do you really want to delete this Footer?")) {
       // DO POST
