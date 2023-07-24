@@ -11,7 +11,7 @@
               style="height: 70px; background-color: #6fd943"
             >
               <div class="col-12">
-                <h4 class="float-left">Blog</h4>
+                <h4 class="float-left">Blogs</h4>
                 <div class="head-right-btn">
                   <button
                     class="btn btn-sm btn-secondary float-right card-text-btn"
@@ -23,7 +23,7 @@
                       href="#"
                       data-ajax-popup="true"
                       data-size="md"
-                      data-title="Invite New User"
+                      data-title="Add Blog"
                       data-toggle="tooltip"
                       title=""
                       data-bs-original-title="Add Blog"
@@ -42,49 +42,41 @@
                     <table class="table table-bordered table-md">
                       <thead>
                         <tr class="text-center">
+                          <th>S.NO</th>
                           <th>Image</th>
                           <th>Heading</th>
-                          <th>Decription</th>
-                          <th>Date & time</th>
+                          <th>Description</th>
                           <th>Action</th>
                         </tr>
                       </thead>
+
                       <tbody>
-                        <% if(!blog[0]){ %>
+                        <% if(!blog[0]) { %>
                         <tr>
-                          <td colspan="5">No Blog Found</td>
+                          <td colspan="100%">No Data</td>
                         </tr>
-                        <% } else { for(var i=0; i< blog.length; i++) { %>
-                        <tr>
+                        <% } else {%> <% blog.forEach(function(blog, index){ %>
+                        <tr class="text-center">
+                          <td><%= index + 1 %></td>
                           <td>
                             <img
-                              src="../../uploads/blog/<%- blog[i].image %>"
-                              alt="<%- blog[i].image %>"
-                              class="rounded"
-                              width="70"
-                              data-toggle="title"
+                            src="<%= blog.image %>"
+                            alt="image"
+                            width="100px"
+                            height="100px"
                             />
-                          </td>
-                          <td><%- blog[i].heading %></td>
-                          <td><%- blog[i].description %></td>
-                          <td><%- blog[i].date_time %></td>
-
+                        </td>
+                            <td><%= blog.heading %></td>
+                            <td><%= blog.description %></td>
                           <td>
                             <i
-                              class="btn btn-info btn-lg fas fa-edit"
-                              id="edit_btn"
-                              data-toggle="modal"
-                              data-model="<%= JSON.stringify(blog[i]) %>"
-                            ></i>
-                            <i
                               class="btn btn-danger btn-lg fas fa-trash-alt"
-                              onclick="deleteblog('<%- blog[i]._id %>')"
-                            >
-                            </i>
+                              onclick="deleteblog('<%= blog._id %>');"
+                            ></i>
                           </td>
                         </tr>
-                        <% } } %>
-                        <tr></tr>
+
+                        <% }); %> <% } %>
                       </tbody>
                     </table>
                   </div>
@@ -117,21 +109,11 @@
               class="form-group font-weight-bold showcursor: true"
             >
               <div class="mb-3 d-grid gap-2 col-12 mx-auto">
-                <label for="image" class="form-label">Image</label>
+                <label for="heading" class="form-label">Heading</label>
                 <input
-                  type="file"
-                  class="form-control"
-                  id="image"
-                  name="image"
-                />
-              </div>
-              <div class="mb-3 d-grid gap-2 col-12 mx-auto">
-                <label for="title" class="form-label">Heading</label>
-                <input
-                  type="text"
-                  class="form-control"
                   id="heading"
-                  name="heading"
+                  heading="heading"
+                  class="form-control"
                   placeholder="Heading"
                 />
               </div>
@@ -144,6 +126,16 @@
                   placeholder="Decription"
                 />
               </div>
+                <div class="mb-3 d-grid gap-2 col-12 mx-auto">
+                    <label for="image" class="form-label">Image</label>
+                    <input
+                    id="image"
+                    name="image"
+                    class=form-control"
+                    placeholder="Image"
+                    type="file"
+                    accept="image/*"
+                    />
 
               <button
                 type="submit"
@@ -160,120 +152,44 @@
     </div>
     <!-- modal  -->
   </div>
-
-  <!-- Modal body -->
-  <div class="modal fade" id="edit">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Edit Blog</h4>
-          <button type="button" class="close" data-dismiss="modal">
-            &times;
-          </button>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-          <form id="editform" class="mx-5">
-            <input type="hidden" id="editid" name="editid" />
-            <div class="mb-3">
-              <label>Heading: </label>
-              <input
-                type="text"
-                class="form-control"
-                id="editheading"
-                name="editheading"
-              />
-            </div>
-            <div class="mb-3">
-              <label>Description: </label>
-              <input
-                type="text"
-                class="form-control"
-                id="editdescription"
-                name="editdescription"
-              />
-            </div>
-            <button
-              type="submit"
-              class="btn mt-3 pull-right"
-              style="background-color: #6fd943; color: #fff"
-            >
-              Save
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
-<%- include ('partials/footer.ejs')%>
+<%- include ('partials/footer.ejs') %>
 
 <script>
-  var addform = $("#addform");
+  function getFormData($form) {
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
 
-  addform.on("submit", addslidersubmitHandler);
+    $.map(unindexed_array, function (n, i) {
+      indexed_array[n["name"]] = n["value"];
+    });
 
-  function addslidersubmitHandler(e) {
-    e.preventDefault();
-
-    // PREPARE FORM DATA
-    var formData = new FormData(addform[0]);
-    console.log(formData);
-    // // DO POST
-    $.ajax({
-      type: "POST",
-      enctype: "multipart/form-data",
-      cache: false,
-      processData: false,
-      contentType: false,
-      url: "/admin/blog/add",
-      data: formData,
-    })
-      .done((res) => {
-        if (res.error == true) {
-          renderToast({ message: res.message, icon: "error" });
-        } else {
-          renderToast({ message: res.message, icon: "success" });
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        }
-      })
-      .fail(function (xhr, status, error) {
-        console.log(xhr.responseText);
-      });
+    return indexed_array;
   }
 
-  $(document).on("click", "#edit_btn", function (e) {
-    let getData = $(e.target).attr("data-model");
-    let finalData = JSON.parse(getData);
-    $("#edit").modal("show");
-    var data = finalData;
-    $("#editid").val(data._id);
-    $("#editheading").val(data.heading);
-    $("#editdescription").val(data.description);
-  });
+  const form = $("#addform");
 
-  var editform = $("#editform");
-  editform.on("submit", editSubmitHandler);
+  form.on("submit", submitHandler);
 
-  function editSubmitHandler(e) {
+  function submitHandler(e) {
     e.preventDefault();
 
     // PREPARE FORM DATA
-    var formData = getFormData(editform);
-    console.log(formData);
+    let formData = new FormData();
+    formData.append("heading", $("#heading").val());
+  formData.append("description", $("#description").val());
+  formData.append("image", $("#image")[0].files[0]);
 
     // DO POST
     $.ajax({
       type: "POST",
-      contentType: "application/json",
-      url: "/admin/blog/edit",
-      data: JSON.stringify(formData),
+      contentType: false,
+      processData: false,
+      url: "/admin/blog/add",
+      data: formData,
     })
+
       .done((res) => {
         if (res.error == true) {
           renderToast({ message: res.message, icon: "error" });
@@ -289,7 +205,6 @@
       });
   }
 </script>
-
 <script>
   function deleteblog(id) {
     if (confirm("Do you really want to delete this record")) {

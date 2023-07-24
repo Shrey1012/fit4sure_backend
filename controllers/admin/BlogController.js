@@ -1,134 +1,156 @@
 const Blog = require("../../models/Blog");
 const Adminauth = require("../../models/Adminauth");
 const multer = require("multer");
-const path = require("path");
-const imageFilter = require("../../config/imageFilter");
-const fs = require("fs");
-const root = process.cwd();
-const moment = require("moment");
+const imageFilter = require("../../config/imageFilter");;
+const firebaseApp = require("../../firebase");
+
+const storage = firebaseApp.storage();
+
+const bucket = firebaseApp.storage().bucket();
+
+const generateUniqueFileName = (fileName) => {
+  const uniqueId = Date.now().toString();
+  const fileExtension = fileName.split(".").pop();
+  return `${uniqueId}.${fileExtension}`;
+};
+
+const uploadImageToFirebase = async (imageFile) => {
+  try {
+    const fileName =generateUniqueFileName(imageFile.originalname);
+    const filePath = `blogs/${fileName}`;
+    const file = bucket.file(filePath);
+
+    // Create a write stream to upload the image file
+    const writeStream = file.createWriteStream({
+      metadata: {
+        contentType: imageFile.mimetype,
+      },
+    });
+
+    // Pipe the image file to the write stream
+    writeStream.end(imageFile.buffer);
+
+    // Handle the completion of the upload
+    return new Promise((resolve, reject) => {
+      writeStream.on("finish", () => {
+        resolve(filePath);
+      });
+
+      writeStream.on("error", (error) => {
+        reject(error);
+      });
+    });
+  } catch (error) {
+    throw new Error("Error uploading image to Firebase Storage");
+  }
+};
 
 class BlogController {
-  static blogList = async (req, res) => {
+  static list = async (req, res) => {
     try {
-      const blog = await Blog.find();
       const admin = await Adminauth.find({});
-      return res.render("admin/blog-list", { blog, admin });
+      const blog = await Blog.find({});
+      const blogWithImageURLs = await Promise.all(
+        blog.map(async (blog) => {
+          const file = storage.bucket().file(blog.image);
+          const [signedUrl] = await file.getSignedUrl({
+            action: "read",
+            expires: "03-01-2500",
+          });
+          return { ...blog.toObject(), image: signedUrl };
+        })
+      );
+      return res.render("admin/blog-list", {
+        blog: blogWithImageURLs,
+        admin,
+      });
     } catch (error) {
-      console.log(error);
-      return res.send("Something went wrong please try again later");
+      res.status(500).json({
+        message: error.message,
+      });
     }
   };
 
-  static blogPost = async (req, res) => {
+  static get_all_blogs = async (req, res) => {
+    try {
+      const blog = await Blog.find({});
+      const blogWithImageURLs = await Promise.all(
+        blog.map(async (blog) => {
+          const file = storage.bucket().file(blog.image);
+          const [signedUrl] = await file.getSignedUrl({
+            action: "read",
+            expires: "03-01-2500",
+          });
+          return { ...blog.toObject(), image: signedUrl };
+        })
+      );
+      return res.send({
+        blog: blogWithImageURLs,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: error.message,
+      });
+    }
+  };
+
+  static add = async (req, res) => {
     try {
       upload(req, res, async function (err) {
-        if (req.fileValidationError) {
-          return res.send(req.fileValidationError);
-        } else if (!req.file) {
-          return res.send("Please upload an icon");
-        } else if (err instanceof multer.MulterError) {
+        if (err instanceof multer.MulterError) {
           console.log(err);
-          return res.send(err);
+          return res.status(500).send(err);
         } else if (err) {
           console.log(err);
-          return res.send(err);
+          return res.status(500).send(err);
         }
 
-        var datetime = new Date();
-        var date =
-          datetime.getDate() +
-          "-" +
-          (datetime.getMonth() + 1) +
-          "-" +
-          datetime.getFullYear() +
-          " " +
-          datetime.getHours() +
-          ":" +
-          datetime.getMinutes() +
-          ":" +
-          datetime.getSeconds();
+        if (!req.file) {
+          return res.status(400).send("Please upload an image file");
+        }
 
-        const blog = Blog({
-          heading: req.body.heading,
-          image: req.file.filename,
+        const imageUrl = await uploadImageToFirebase(req.file);
+        const blog = new Blog({
+          heading : req.body.heading,
           description: req.body.description,
-          date_time: date,
+          image: imageUrl,
         });
         await blog.save();
         return res.send({
-          error: false,
-          message: " Blog added successfully",
+          message: "Blog Added Successfully",
         });
       });
     } catch (error) {
-      console.log(error);
-      return res.status(500).send("Somthing went wrong please try again later");
+      res.status(500).json({
+        message: error.message,
+      });
     }
   };
-  static edit = async (req, res) => {
-    try {
-      const blog = await Blog.findOne({
-        _id: req.body.editid,
-      });
-      await Blog.findOneAndUpdate(
-        {
-          _id: req.body.editid,
-        },
-        {
-          heading: req.body.editheading,
-          description: req.body.editdescription,
-          updated_at: Date.now(),
-        }
-      );
-      return res.send({
-        error: false,
-        message: "Blog updated successfully",
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send("Somthing went wrong please try again later");
-    }
-  };
+
   static delete = async (req, res) => {
     try {
-      const blog = await Blog.findOne({
-        _id: req.body.id,
-      });
-      //  return console.log(blog)
-      await Blog.deleteOne({
-        _id: blog.id,
-      });
-      fs.unlink(path.join(root, "/public/uploads/blog", blog.image), (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+      const blog = await Blog.findOne({ _id: req.body.id });
+
+      // Delete the image from Firebase Storage
+      const filePath = blog.image;
+      const file = bucket.file(filePath);
+      await file.delete();
+
+      await Blog.findByIdAndDelete({ _id: req.body.id });
+
       return res.send({
-        error: false,
         message: "Blog Deleted Successfully",
       });
     } catch (error) {
-      console.log(error);
-      return res
-        .status(500)
-        .send("Something went wrong please try again later");
+      res.status(500).json({
+        message: error.message,
+      });
     }
   };
 }
-// Set The Storage Engine
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../../public/uploads/blog"),
-  filename: function (req, file, cb) {
-    cb(null, `${Date.now()}.jpg`);
-  },
-});
 
-// Init Upload
 const upload = multer({
-  storage: storage,
-  // limits: {
-  //     fileSize: 1000000
-  // },
+  storage: multer.memoryStorage(),
   fileFilter: imageFilter,
 }).single("image");
 

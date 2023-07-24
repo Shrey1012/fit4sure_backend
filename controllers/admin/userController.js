@@ -138,7 +138,7 @@ class usersController {
                 'from': 'trainers',
                 'localField': 'trainer_id',
                 'foreignField': '_id',
-                'as': 'astrologer'
+                'as': 'trainer'
               }
             }, {
               '$unwind': {

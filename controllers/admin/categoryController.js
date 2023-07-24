@@ -27,6 +27,19 @@ class CategoryController {
     }
   };
 
+  static get_all_categories = async (req, res) => {
+    try {
+    const category = await Category.find({});
+    return res.send({
+        category,
+    });
+    } catch (error) {
+    res.status(500).json({
+        message: error.message,
+    });
+    }
+};
+
   static add = async (req, res) => {
     try {
         const category = Category({

@@ -307,6 +307,34 @@ class TrainerController {
         .send("Error genrated while fetching trainer details.");
     }
   };
+
+  static trainerByCategory = async (req, res) => {
+    try {
+      const categoryId = req.params.categoryId;
+
+      // Find the corresponding category based on the categoryId
+      const category = await Category.findById(categoryId);
+      if (!category) {
+        return res.status(404).json({ error: "Category not found" });
+      }
+
+      const trainers = await Trainer.find({ category: categoryId });
+
+      const trainersWithImageURLs = await Promise.all(
+        trainers.map(async (trainer) => {
+          const file = storage.bucket().file(trainer.image);
+          const [signedUrl] = await file.getSignedUrl({
+            action: "read",
+            expires: "03-01-2500",
+          });
+          return { ...trainer.toObject(), image: signedUrl };
+        })
+      );
+      return res.send({ trainers: trainersWithImageURLs });
+    } catch (err) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
 }
 
 const upload = multer({
