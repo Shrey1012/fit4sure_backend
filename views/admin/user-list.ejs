@@ -30,6 +30,7 @@
                           <th>Mobile</th>
                           <th>Date of Birth</th>
                           <th>State of Residence</th>
+                          <th>Test Sheet</th>
                           <th>Status</th>
                           <th>Created At</th>
                         </tr>
@@ -58,6 +59,13 @@
                           <td><%= recordData.contactNumber %></td>
                           <td><%= recordData.dateOfBirth %></td>
                           <td><%= recordData.stateOfResidence %></td>
+                          <td>
+                            <%if(recordData.test) { %>
+                            <button class="btn bg-blue">
+                            <a href="<%= recordData.test %>">Download</a> </button>
+                            <% } else { %>
+                              Not Submitted
+                            <% } %>
                           <td>
                             <button
                               class="btn <%- recordData.approved ? 'bg-success' : 'bg-danger' %> text-white"

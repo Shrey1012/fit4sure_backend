@@ -95,6 +95,9 @@ const schema = new mongoose.Schema({
   stateOfResidence: {
     type: String,
   },
+  test: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("User", schema);
