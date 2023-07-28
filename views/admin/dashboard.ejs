@@ -6,9 +6,15 @@
       <div class="row">
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
-              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
-              <div class="card-icon d-flex align-items-center justify-content-center">
+            <div
+              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
+            >
+              <p
+                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
+              ></p>
+              <div
+                class="card-icon d-flex align-items-center justify-content-center"
+              >
                 <i class="fas fa-dollar-sign"></i>
               </div>
               Today Booking Amount
@@ -16,10 +22,11 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold"><%= todayOrderData[0]?.todayAmount?todayOrderData[0]?.todayAmount:0 %></h3>
-                <% console.log(todayOrderData[0]?.todayAmount ) %>
-                <% console.log(last7daysAmount[0]?.todayAmount) %>
-                <% console.log(last30daysAmount[0]?.todayAmount) %>
+                <h3 class="card-title fs-18 font-weight-bold">
+                  <%=
+                  todayOrderData[0]?.todayAmount?todayOrderData[0]?.todayAmount:0
+                  %>
+                </h3>
               </div>
             </div>
           </div>
@@ -27,12 +34,18 @@
 
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+            <div
+              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
+            >
               <!-- <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="material-icons">today</i>
                   </div> -->
-              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
-              <div class="card-icon d-flex align-items-center justify-content-center">
+              <p
+                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
+              ></p>
+              <div
+                class="card-icon d-flex align-items-center justify-content-center"
+              >
                 <i class="fas fa-dollar-sign"></i>
               </div>
               Total Amount
@@ -40,19 +53,27 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold"><%= dashboardData[0]?.totalAmount %></h3>
+                <h3 class="card-title fs-18 font-weight-bold">
+                  <%= dashboardData[0]?.totalAmount %>
+                </h3>
               </div>
             </div>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+            <div
+              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
+            >
               <!-- <div class="card-icon d-flex align-items-center justify-content-center">
                     <i class="material-icons">today</i>
                 </div> -->
-              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
-              <div class="card-icon d-flex align-items-center justify-content-center">
+              <p
+                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
+              ></p>
+              <div
+                class="card-icon d-flex align-items-center justify-content-center"
+              >
                 <i class="fas fa-user-circle"></i>
               </div>
               Total Customer
@@ -60,16 +81,24 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold"><%= dashboardData[0]?.totalUsers %></h3>
+                <h3 class="card-title fs-18 font-weight-bold">
+                  <%= dashboardData[0]?.totalUsers %>
+                </h3>
               </div>
             </div>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
-              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
-              <div class="card-icon d-flex align-items-center justify-content-center">
+            <div
+              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
+            >
+              <p
+                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
+              ></p>
+              <div
+                class="card-icon d-flex align-items-center justify-content-center"
+              >
                 <i class="fas fa-calendar-minus"></i>
               </div>
               Total Classes
@@ -77,19 +106,27 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold"><%= dashboardData[0]?.totalClasses %></h3>
+                <h3 class="card-title fs-18 font-weight-bold">
+                  <%= dashboardData[0]?.totalClasses %>
+                </h3>
               </div>
             </div>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+            <div
+              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
+            >
               <!-- <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="material-icons">today</i>
                   </div> -->
-              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
-              <div class="card-icon d-flex align-items-center justify-content-center">
+              <p
+                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
+              ></p>
+              <div
+                class="card-icon d-flex align-items-center justify-content-center"
+              >
                 <i class="fas fa-dollar-sign"></i>
               </div>
               Last 7 days Amount
@@ -97,19 +134,29 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold"><%= last7daysAmount[0]?.todayAmount?last7daysAmount[0]?.todayAmount:0 %></h3>
+                <h3 class="card-title fs-18 font-weight-bold">
+                  <%=
+                  last7daysAmount[0]?.todayAmount?last7daysAmount[0]?.todayAmount:0
+                  %>
+                </h3>
               </div>
             </div>
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
           <div class="card card-stats statistic-box mb-4">
-            <div class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0">
+            <div
+              class="d-card-header d-card-header-dashboard card-header-warning card-header-icon position-relative border-0 text-center px-3 py-0"
+            >
               <!-- <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="material-icons">today</i>
                   </div> -->
-              <p class="card-category text-uppercase fs-10 font-weight-bold text-muted"></p>
-              <div class="card-icon d-flex align-items-center justify-content-center">
+              <p
+                class="card-category text-uppercase fs-10 font-weight-bold text-muted"
+              ></p>
+              <div
+                class="card-icon d-flex align-items-center justify-content-center"
+              >
                 <i class="fas fa-dollar-sign"></i>
               </div>
               Last 30 days Amount
@@ -117,7 +164,11 @@
             </div>
             <div class="d-card-footer p-3 text-center">
               <div class="stats">
-                <h3 class="card-title fs-18 font-weight-bold"><%= last30daysAmount[0]?.todayAmount?last30daysAmount[0]?.todayAmount:0 %></h3>
+                <h3 class="card-title fs-18 font-weight-bold">
+                  <%=
+                  last30daysAmount[0]?.todayAmount?last30daysAmount[0]?.todayAmount:0
+                  %>
+                </h3>
               </div>
             </div>
           </div>
@@ -148,7 +199,8 @@
                         <tr>
                           <td colspan="100%">No Data</td>
                         </tr>
-                        <% } else {%> <% dashboardData[0].users.forEach(function(user){%>
+                        <% } else {%> <%
+                        dashboardData[0].users.forEach(function(user){%>
                         <tr>
                           <td width="10%"><%= user?.name%></td>
                           <td width="10%"><%= user?.contactNumber %></td>
@@ -189,10 +241,13 @@
                           <tr>
                             <td colspan="100%">No Data</td>
                           </tr>
-                          <% } else {%> <% dashboardData[0].classes.forEach(function(classes){%>
+                          <% } else {%> <%
+                          dashboardData[0].classes.forEach(function(classes){%>
                           <tr>
                             <td width="10%"><%= classes?.user[0]?.name%></td>
-                            <td width="10%"><%= classes?.trainer[0]?.name %></td>
+                            <td width="10%">
+                              <%= classes?.trainer[0]?.name %>
+                            </td>
                             <td width="10%"><%= classes.date %></td>
                             <td width="10%"><%= classes.time %></td>
                             <td width="10%"><%= classes.status %></td>
