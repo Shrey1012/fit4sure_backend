@@ -28,14 +28,6 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  duration: {
-    type: String,
-    default: null,
-  },
-  amount: {
-    type: Number,
-    require: true,
-  },
   currency: {
     type: String,
     require: true,
@@ -57,6 +49,10 @@ const schema = new mongoose.Schema({
   updated_at: {
     type: String,
     default: new Date().toLocaleDateString(),
+  },
+  createdTime: {
+    type: Date,
+    default: Date.now,
   },
 });
 

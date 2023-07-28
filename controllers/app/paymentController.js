@@ -4,6 +4,7 @@ const Appointment = require("../../models/Appointment");
 const Razorpay = require("razorpay");
 var invNum = require("invoice-number");
 const Receipt = require("../../models/Receipt");
+const cron = require("node-cron");
 
 class PaymentController {
   static order_with_rozorpay = async (req, res) => {
@@ -43,7 +44,7 @@ class PaymentController {
       const order = Order({
         user_id: req.userId ? req.userId : "",
         order_id: order_data.id,
-        amount: order_data.amount,
+        amount: order_data.amount/100,
         subscription_plan_id: data.subscription_plan_id,
         trainer_id: data.trainer_id,
         duration: data.duration,
@@ -139,10 +140,10 @@ class PaymentController {
 
       const payment = await instance.orders.fetch(data.order_id);
 
-      if (payment.amount_due == 0) {
+      if (payment.amount_due != 0) {
         return res.status(400).send({
           status: 400,
-          message: "No Payment due",
+          message: "Payment due",
         });
       } else {
         const order = await Order.findOneAndUpdate(
@@ -151,6 +152,7 @@ class PaymentController {
           },
           {
             payment_data: data.payment_data,
+            status: "success",
           }
         );
 
@@ -169,13 +171,37 @@ class PaymentController {
         message: "Success",
       });
     } catch (error) {
+      console.log(error);
       return res.status(500).send({
         status: 500,
         message: "Something went wrong please try again later",
+        error,
       });
     }
   };
 }
+
+cron.schedule("0 * * * *", async () => {
+  const timeThreshold = 30 * 60 * 1000; // 30 minutes in milliseconds
+  const currentTime = Date.now();
+
+  try {
+    // Find all orders with status "created"
+    const createdOrders = await Order.find({ status: "created" });
+
+    // Filter orders that are older than the time threshold
+    const ordersToDelete = createdOrders.filter(
+      (order) => currentTime - order.createdTime.getTime() >= timeThreshold
+    );
+
+    // Delete the orders that are older than the time threshold
+    for (const orderToDelete of ordersToDelete) {
+      await Order.findOneAndDelete({ _id: orderToDelete._id });
+    }
+  } catch (error) {
+    console.error('Error deleting "created" orders:', error);
+  }
+});
 
 var instance = new Razorpay({
   key_id: "rzp_test_rFXwtHIILu1CTU",

@@ -26,10 +26,10 @@
                         <tr>
                             <th>S.No</th>
                           <th>User Id</th>
-                          <th>Trainer</th>
                           <th>Subscription Plan</th>
                           <th>Amount</th>
                           <th>Order Id</th>
+                          <th>Status</th>
                           <th>Receipt Id</th>
                           <th>Date</th>
                         </tr>
@@ -48,15 +48,12 @@
                             paymentData.user_id.name : " "%>
                           </td>
                           <td>
-                            <%= paymentData.trainer_id ? paymentData.trainer_id.name
-                            : " " %>
-                          </td>
-                          <td>
                             <%= paymentData.subscription_plan_id ? paymentData.subscription_plan_id.duration
                             : " " %>
                           </td>
                           <td><%= paymentData.amount %></td>
                           <td><%= paymentData.order_id %></td>
+                          <td><%= paymentData.status %></td>
                           <td><%= paymentData.receipt_id %></td>
                           <td>
                             <%= paymentData.created_at%>
