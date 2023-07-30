@@ -42,6 +42,9 @@ const schema = new mongoose.Schema({
     require: true,
     default: "created",
   },
+  payment_data: {
+    type: mongoose.Schema.Types.Mixed,
+  },
   created_at: {
     type: String,
     default: new Date().toLocaleDateString(),

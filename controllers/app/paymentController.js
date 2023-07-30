@@ -100,7 +100,7 @@ class PaymentController {
       const order = Order({
         user_id: req.login_user ? req.login_user._id : "",
         order_id: order_data.id,
-        amount: order_data.amount,
+        amount: order_data.amount/100,
         subscription_plan_id: data.subscription_plan_id,
         trainer_id: data.trainer_id,
         duration: data.duration,
@@ -153,6 +153,9 @@ class PaymentController {
           {
             payment_data: data.payment_data,
             status: "success",
+          },
+          {
+            new: true,
           }
         );
 

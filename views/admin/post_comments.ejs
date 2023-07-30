@@ -32,20 +32,24 @@
                       </thead>
 
                       <tbody>
-                        <% if(!post_comments[0]){%>
+                        <% if(!posts[0]){%>
                         <tr>
-                            <td colspan="4">No shortvideo comments Found</td>
+                          <td colspan="4">No posts found</td>
                         </tr>
-                        <% } else { post_comments.forEach(function(post_comments,test){ %>
+                        <% } else { posts.forEach(function(post){ %> <%
+                        {post?.comments.forEach(function(comment,index){ %>
                         <tr>
-                            <td><%= test+1%> </td>
-                            <td><%= post_comments.user_id ? post_comments.user_id.name : " " %> </td>
-                            <td><%= post_comments.post_id.text %> </td>
-                            <td><%= post_comments.comment %> </td>
+                          <td><%= index+1%></td>
+                          <td><%= comment.user.name%></td>
+                          <td><%= post.text %></td>
+                          <td><%= comment.text %></td>
                         </tr>
-    
+                        <% }); } %> 
+                  <tr>
+
+                  </tr>
                         <% }); } %>
-                    </tbody>
+                      </tbody>
                     </table>
                   </div>
                 </div>

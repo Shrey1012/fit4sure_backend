@@ -45,7 +45,7 @@
                           <td>
                             <img
                               alt="file"
-                              src="/uploads/post/<%= post.image %>"
+                              src=<%= post.image %>
                               height="50px"
                               width="50px"
                             />
@@ -55,7 +55,7 @@
                           </td>
                           <td><%= post.text %></td>
 
-                          <td><%= post.datetime %></td>
+                          <td><%= convertDate(post.datetime) %></td>
                           <td>
                             <button
                               class="btn <%- post.approved ? 'bg-success' : 'bg-danger' %> text-white"
@@ -136,6 +136,23 @@
   <!-- Modal -->
 </div>
 <!-- Main Content -->
+
+<% 
+function convertDate(date) {
+  var d = new Date(date);
+  var datestring =
+    d.getDate() +
+    "-" +
+    (d.getMonth() + 1) +
+    "-" +
+    d.getFullYear() +
+    " " + 
+    d.getHours() +
+    ":" +
+    d.getMinutes();
+  return datestring;
+}
+%>
 
 <%- include ('partials/footer.ejs') %>
 <script>
