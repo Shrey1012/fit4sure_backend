@@ -47,29 +47,25 @@ const uploadImageToFirebase = async (imageFile) => {
 class postController {
   static add_post = async (req, res) => {
     try {
-      if (req.file) {
-        upload(req, res, async function (err) {
-          if (err instanceof multer.MulterError) {
-            console.log(err);
-            return res.status(500).send(err);
-          } else if (err) {
-            console.log(err);
-            return res.status(500).send(err);
+        upload(req, res, async (err) => {
+          if (err) {
+            return res.status(400).send({
+              error: true,
+              message: err.message,
+            });
           }
+
+          if(req.file){
 
           const imageUrl = await uploadImageToFirebase(req.file);
 
-          var text = req.body.text;
-
-          var category = req.body.category;
-
-          var userId = req.body.userId;
+          const { text, category } = req.body;
 
           let post = {
             image: imageUrl,
             text: text,
             category: category,
-            user_id: userId,
+            user_id: req.userId,
           };
 
           let saveObj = post;
@@ -81,7 +77,7 @@ class postController {
               image: imageUrl,
               text: text,
               category: category,
-              user_id: userId,
+              user_id: req.userId,
             },
           };
           // sending notification start
@@ -97,45 +93,41 @@ class postController {
 
           // sending notification end
           res.send(returnObj);
-        });
       } else {
-        var text = req.body.text;
+          const { text, category } = req.body;
 
-        var category = req.body.category;
-
-        var userId = req.body.userId;
-
-        let post = {
-          text: text,
-          category: category,
-          user_id: userId,
-        };
-
-        let saveObj = post;
-        await Post.create(saveObj);
-
-        let returnObj = {
-          message: "Success",
-          data: {
+          let post = {
             text: text,
             category: category,
-            user_id: userId,
-          },
-        };
-        // sending notification start
-        const notification = Notification({
-          user: req.userId,
-          type: "Post-added",
-          data: {
-            time: Date.now(),
-          },
-        });
-        await notification.save();
-        if (req.app.socket) req.app.socket.emit("Post-added");
+            user_id: req.userId,
+          };
 
-        // sending notification end
-        res.send(returnObj);
-      }
+          let saveObj = post;
+          await Post.create(saveObj);
+
+          let returnObj = {
+            message: "Success",
+            data: {
+              text: text,
+              category: category,
+              user_id: req.userId,
+            },
+          };
+          // sending notification start
+          const notification = Notification({
+            user: req.userId,
+            type: "Post-added",
+            data: {
+              time: Date.now(),
+            },
+          });
+          await notification.save();
+          if (req.app.socket) req.app.socket.emit("Post-added");
+
+          // sending notification end
+          res.send(returnObj);
+        }
+      });
     } catch (error) {
       console.log(error);
       return res

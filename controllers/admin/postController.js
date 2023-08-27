@@ -7,6 +7,7 @@ const root = process.cwd();
 const firebaseApp = require("../../firebase");
 
 const storage = firebaseApp.storage();
+const bucket = storage.bucket();
 
 class postController {
   static list = async (req, res) => {
@@ -14,6 +15,7 @@ class postController {
     const admin = await Adminauth.find({});
     const postWithImageURLs = await Promise.all(
       post.map(async (post) => {
+        if(!post.image) return post;
         const file = storage.bucket().file(post.image);
         const [signedUrl] = await file.getSignedUrl({
           action: "read",

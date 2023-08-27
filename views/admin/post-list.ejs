@@ -43,19 +43,23 @@
                         <tr>
                           <td><%= index+1 %></td>
                           <td>
+                            <% if(post.image) {%>
                             <img
                               alt="file"
                               src=<%= post.image %>
                               height="50px"
                               width="50px"
                             />
+                            <% }else { %>
+                              <p>Image not found</p>
+                            <% } %>
                           </td>
                           <td>
                             <%= post.user_id ? post.user_id.name : 'Not Available' %>
                           </td>
                           <td><%= post.text %></td>
 
-                          <td><%= convertDate(post.datetime) %></td>
+                          <td><%= convertDate(post.date) %></td>
                           <td>
                             <button
                               class="btn <%- post.approved ? 'bg-success' : 'bg-danger' %> text-white"
