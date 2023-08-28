@@ -20,6 +20,9 @@ const schema = new mongoose.Schema({
     ref: "Trainer",
     default: null,
   },
+  plan_details: {
+    type: String,
+  },
   duration: {
     type: String,
     default: null,
@@ -44,6 +47,9 @@ const schema = new mongoose.Schema({
   },
   payment_data: {
     type: mongoose.Schema.Types.Mixed,
+  },
+  invoice: {
+    type: String,
   },
   created_at: {
     type: String,

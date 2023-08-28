@@ -171,7 +171,10 @@ class AuthController {
     try {
       const user = await User.findById(req.userId);
       if (!user) return res.status(401).send("User not found");
-      if (user.image) {
+
+      const isGoogleImage = user.image && user.image.startsWith("https://");
+
+      if (!isGoogleImage && user.image) {
         const file = bucket.file(user.image);
         const [signedUrl] = await file.getSignedUrl({
           action: "read",

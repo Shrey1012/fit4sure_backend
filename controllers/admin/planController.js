@@ -36,8 +36,10 @@ class PlanController {
       const plan = await Plan.create({
         title: req.body.title,
         price: req.body.price,
+        per_month_price: req.body.per_month_price,
         duration: req.body.duration,
         description: req.body.description,
+        short_description: req.body.short_description,
       });
 
       await plan.save();

@@ -45,8 +45,10 @@
                           <th>S.No</th>
                           <th>Title</th>
                           <th>Price</th>
+                          <th>Per Month Price</th>
                           <th>Duration</th>
                           <th>Description</th>
+                          <th>Short Description</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -61,8 +63,10 @@
                           <td><%= index+1 %></td>
                           <td><%= plan.title %></td>
                           <td><%= plan.price %></td>
+                          <td><%= plan.per_month_price %></td>
                           <td><%= plan.duration %></td>
                           <td><%= plan.description %></td>
+                          <td><%= plan.short_description %></td>
                           <td style="width: 12px">
                             <i
                               class="btn btn-danger btn-lg fas fa-trash-alt"
@@ -120,6 +124,15 @@
                 />
               </div>
               <div class="mb-3">
+                <label>Per Month Price: </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="per_month_price"
+                  name="per_month_price"
+                  placeholder="Per Month Price"
+                />
+              <div class="mb-3">
                 <label>Duration: </label>
                 <input
                   type="text"
@@ -137,6 +150,16 @@
                   id="description"
                   name="description"
                   placeholder="Description"
+                />
+              </div>
+              <div class="mb-3">
+                <label>Short Description: </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="short_description"
+                  name="short_description"
+                  placeholder="Short Description"
                 />
               </div>
               <button
