@@ -19,10 +19,6 @@ const ClassSchema = new mongoose.Schema({
     required: false,
     default: new Date().toLocaleDateString(),
   },
-  calender_date: {
-    type: String,
-    default: null,
-},
   meeting_id: {
     type: String,
     required: false,
