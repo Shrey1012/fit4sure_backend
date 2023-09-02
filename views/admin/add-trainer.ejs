@@ -30,6 +30,14 @@
               style="height: 70px; background-color: #6fd943"
             >
               <h4 class="float-left">Add Trainer</h4>
+              <div class="ml-5">
+                <a
+                  href="/admin/trainer/list"
+                  class="btn btn-primary float-right text-white"
+                >
+                  Close
+                </a>
+              </div>
             </div>
             <div class="card-body">
               <div class="clearfix mb-3"></div>
@@ -264,18 +272,17 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-12">
                           <div class="form-group">
                             <label class="form-control-label">Website Description:</label>
                             <div class="input-group">
-                              <input
+                              <textarea
                                 class="form-control"
                                 name="website_desc"
                                 id="website_desc"
                                 type="text"
                                 placeholder="Enter Website Description"
-                                textarea="100px"
-                              />
+                              ></textarea>
                             </div>
                           </div>
                         </div>
@@ -303,7 +310,7 @@
                                 rows="3"
                                 class="form-control"
                                 name="about"
-                                id="summernote"
+                                id="about"
                               ></textarea>
                             </div>
                           </div>

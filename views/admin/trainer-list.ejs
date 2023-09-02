@@ -261,7 +261,34 @@
                   </div>
                 </div>
               </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                <label class="form-control-label">People Trained:</label>
+                <div class="input-group">
+                  <input class="form-control" name="edit_people_trained" id="edit_people_trained" type="text" placeholder="Enter People Trained" />
+                </div>
+              </div>
+            </div>
 
+            <div class="col-lg-4">
+                <div class="form-group">
+                <label class="form-control-label">Rating:</label>
+                <div class="input-group">
+                  <input class="form-control" name="edit_rating" id="edit_rating" type="text" placeholder="Enter Rating" />
+                </div>
+              </div>
+            </div>
+              
+            <div class="col-12">
+                <div class="form-group">
+                <label class="form-control-label">Website Description:</label>
+                <div class="input-group">
+                  <textarea class="form-control" name="edit_website_desc" id="edit_website_desc" type="text" placeholder="Enter Website Description" > </textarea>
+                </div>
+              </div>
+            </div>
+
+             
               <div class="col-12">
                 <div class="form-group">
                   <label class="form-control-label"> About Astrologer:</label>
@@ -311,6 +338,9 @@
     $("#edit_ifsc_code").val(data.ifsc_code);
     $("#edit_branch").val(data.branch);
     $("#edit_upi").val(data.upi);
+    $("#edit_people_trained").val(data.people_trained);
+    $("#edit_rating").val(data.rating);
+    $("#edit_website_desc").val(data.website_desc);
     $("#edit_about").val(data.about);
   });
 

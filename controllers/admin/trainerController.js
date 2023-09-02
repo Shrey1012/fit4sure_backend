@@ -192,9 +192,6 @@ class TrainerController {
           ifsc_code: req.body.edit_ifsc_code,
           branch: req.body.edit_branch,
           upi: req.body.edit_upi,
-          category: req.body.edit_category
-            ? req.body.edit_category
-            : "Not Found",
           people_trained: req.body.edit_people_trained,
           rating: req.body.edit_rating,
           website_desc: req.body.edit_website_desc,
@@ -207,7 +204,7 @@ class TrainerController {
       });
     } catch (error) {
       console.log(error);
-      return res.status(500).send("Somthing went wrong please try again later");
+      return res.status(500).send("Something went wrong please try again later");
     }
   };
 
@@ -304,7 +301,7 @@ class TrainerController {
       console.log(error);
       return res
         .status(400)
-        .send("Error genrated while fetching trainer details.");
+        .send("Error generated while fetching trainer details.");
     }
   };
 
