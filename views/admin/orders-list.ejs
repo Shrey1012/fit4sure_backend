@@ -56,7 +56,7 @@
                           <td><%= paymentData.order_id %></td>
                           <td><%= paymentData.status %></td>
                           <td><%= paymentData.receipt_id %></td>
-                          <td><%= paymentData.payment_data.razorpay_payment_id %></td>
+                          <td><%= paymentData?.payment_data?.razorpay_payment_id %></td>
                           <td>
                             <%= paymentData.created_at%>
                           </td>
